@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libDSZ.a  CMakeFiles/DSZ.dir/source/include/mh2l/DSZHiggs.f.o CMakeFiles/DSZ.dir/source/include/mh2l/functs.f.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libDSZ.a
