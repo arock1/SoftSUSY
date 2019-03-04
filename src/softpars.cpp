@@ -4331,5 +4331,195 @@ a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2);
   
 }
 
+ftPars::FGMCaseBNonRN(const MssmSusy & xx, double LAMBDA, 
+             double mMess,  double cgrav) {
+  
+  // Modified thresholds by JEL 1-26-04 to accomodate numerical infinities
+  
+  const double epstol = 1.0e-4;
+  double x = LAMBDA / mMess;
+  double lambda = LAMBDA/(16.0 * sqr(PI));
+  
+  double f, g;
+  
+  if(fabs(x) < epstol) { /// hep-ph/9801271
+    g = 1.0 + x*x/6.0 + sqr(x*x)/15.0;
+    f = 1.0 + x*x/36.0 - 11.0*sqr(x*x)/450.0;
+  }
+  else if(fabs(x-1.0) < 0.0001) {
+    g  =  log(4.0);
+    f  = -sqr(PI)/6.0 + log(4.0) + 0.5*sqr(log(4.0));
+    g -=  0.0008132638905771205626;
+    f -= -0.0049563838821509165200;
+  }
+  else {
+    g = 1.0 / sqr(x) * 
+      ((1.0 + x) * log(1.0 + x) + (1.0 - x) * log(1.0 - x));
+    f = (1.0 + x) / sqr(x) * 
+      (log(1.0 + x) - 2.0 * dilog(x / (1.0 + x)) + 0.5 * 
+       dilog(2.0 * x / (1.0 + x))) + 
+      (1.0 - x) / sqr(x) * (log(1.0 - x) - 2.0 * dilog(-x / (1.0 - x)) +
+          0.5 * dilog(-2.0 * x / (1.0 - x)));
+  }
+  
+  double n5d = 2;
+  
+  double g12 = sqr(xx.displayGaugeCoupling(1));
+  double g22 = sqr(xx.displayGaugeCoupling(2));
+  double g32 = sqr(xx.displayGaugeCoupling(3));
+  
+  double yt = xx.displayYukawaElement(YU,3,3); 
+  double yb = xx.displayYukawaElement(YD,3,3); 
+  double ytau = xx.displayYukawaElement(YE,3,3);
+  
+  double yt2 = sqr(yt);
+  double yb2 = sqr(yb);
+  double ytau2 = sqr(ytau);
+  
+  /// There is a relative minus in the mGMSB conditions for gaugino masses,
+  /// since these equations are for L=-M/2 gaugino gaugino. See hep-ph/9801271:
+  /// BCA 27/7/12
+  double m1, m2, m3;
+  m1 = n5d * g12 * lambda * g; 
+  m2 = n5d * g22 * lambda * g; 
+  m3 = n5d * g32 * lambda * g; 
+  setGauginoMass(1, m1);   setGauginoMass(2, m2);   setGauginoMass(3, m3);
+  
+  setM32(2.37e-19 * LAMBDA * mMess * cgrav);
+  
+  double g1f = sqr(g12);
+  double g2f = sqr(g22);
+  double g3f = sqr(g32);
+  
+  double mursq, mdrsq, mersq, mqlsq, mllsq;
+  mursq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.6 * 4.0 / 9.0 * g1f);
+  mdrsq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.6 * 1.0 / 9.0 * g1f);
+  mersq = 2.0 * f * sqr(lambda) * n5d * 
+    (0.6 * g1f);
+  mqlsq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.75 * g2f + 0.6 * g1f / 36.0);
+  mllsq = 2.0 * f * sqr(lambda) * n5d * 
+    (0.75 * g2f + 0.6 * 0.25 * g1f) ;
+  
+  double a0 = 0.,a1 = 0.,a2 = 0.,a3 = 0.,a4 = 0.,a5 = 0.,a6 = 0.,a7 = 0.,a8 = 0.;
+  
+  //Ql
+
+a8= f * sqr(lambda) *yb2*(-28./15.*g12-12.*g22 - 64./3.*g32 + 8.*yt2 + 72.*yb2 + 16*ytau2)/2. + f * sqr(lambda) *yt2*(-52./15.*g12-12.*g22 - 64./3.*g32 + 8.*yb2 + 72.*yt2)/2.;
+
+  
+  setSoftMassElement(mQl,1,1, mqlsq  + a0);
+  setSoftMassElement(mQl,1,2, a1);
+  setSoftMassElement(mQl,1,3, a2);
+  setSoftMassElement(mQl,2,1, a3);
+  setSoftMassElement(mQl,2,2, mqlsq  + a4);
+  setSoftMassElement(mQl,2,3, a5);
+  setSoftMassElement(mQl,3,1, a6);
+  setSoftMassElement(mQl,3,2, a7);
+  setSoftMassElement(mQl,3,3, mqlsq  + a8);
+  
+  
+  //Ur
+
+a8=f * sqr(lambda) *yt2*(-52./15.*g12-12.*g22 - 64./3.*g32 + 8.*yb2 + 72.*yt2);
+  
+/* 
+cout <<"UR"<<endl;
+cout <<"a0="<<a0 <<endl;
+cout <<"a1="<<a1 <<endl;
+cout <<"a2="<<a2 <<endl;
+cout <<"a3="<<a3 <<endl;
+cout <<"a4="<<a4 <<endl;
+cout <<"a5="<<a5 <<endl;
+cout <<"a6="<<a6 <<endl;
+cout <<"a7="<<a7 <<endl;
+cout <<"a8="<<a8 <<endl;
+ */
+
+  setSoftMassElement(mUr,1,1, mursq + a0);
+  setSoftMassElement(mUr,1,2, a1);
+  setSoftMassElement(mUr,1,3, a2);
+  setSoftMassElement(mUr,2,1, a3);
+  setSoftMassElement(mUr,2,2, mursq + a4);
+  setSoftMassElement(mUr,2,3, a5);
+  setSoftMassElement(mUr,3,1, a6);
+  setSoftMassElement(mUr,3,2, a7);
+  setSoftMassElement(mUr,3,3, mursq + a8);
+  
+  //Dr
+
+
+a8=f * sqr(lambda) *yb2*(-28./15.*g12-12.*g22 - 64./3.*g32 + 8.*yt2 + 72.*yb2 + 16*ytau2);
+
+  
+  
+  setSoftMassElement(mDr,1,1, mdrsq + a0);
+  setSoftMassElement(mDr,1,2, a1);
+  setSoftMassElement(mDr,1,3, a2);
+  setSoftMassElement(mDr,2,1, a3);
+  setSoftMassElement(mDr,2,2, mdrsq + a4);
+  setSoftMassElement(mDr,2,3, a5);
+  setSoftMassElement(mDr,3,1, a6);
+  setSoftMassElement(mDr,3,2, a7);
+  setSoftMassElement(mDr,3,3, mdrsq + a8);
+  
+  //Ll
+
+a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2)/2.;
+
+
+  setSoftMassElement(mLl,1,1, mllsq  + a0);
+  setSoftMassElement(mLl,1,2, a1);
+  setSoftMassElement(mLl,1,3, a2);
+  setSoftMassElement(mLl,2,1, a3);
+  setSoftMassElement(mLl,2,2, mllsq  + a4);
+  setSoftMassElement(mLl,2,3, a5);
+  setSoftMassElement(mLl,3,1, a6);
+  setSoftMassElement(mLl,3,2, a7);
+  setSoftMassElement(mLl,3,3, mllsq  + a8);
+  
+  
+  //Er
+a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2);
+
+
+  
+  setSoftMassElement(mEr,1,1, mersq + a0);
+  setSoftMassElement(mEr,1,2, a1);
+  setSoftMassElement(mEr,1,3, a2);
+  setSoftMassElement(mEr,2,1, a3);
+  setSoftMassElement(mEr,2,2, mersq + a4);
+  setSoftMassElement(mEr,2,3, a5);
+  setSoftMassElement(mEr,3,1, a6);
+  setSoftMassElement(mEr,3,2, a7);
+  setSoftMassElement(mEr,3,3, mersq + a8);
+  
+  //higgs masses
+  double deltaHu = - f * sqr(lambda) * yt2* (18.*yt2 + 6.*yb2);
+  
+  double deltaHd = - f * sqr(lambda) * (18.*yb2*yb2 + 6.*yb2*yt2 + 12. *ytau2 *ytau2);
+  
+  setMh1Squared(mllsq + deltaHd); //Hd
+  setMh2Squared(mllsq + deltaHu); //Hu
+  
+  //trilinears
+  
+  double UA3 = 2.*(yb2 + 3. * yt2);
+  
+  setTrilinearElement(UA, 3, 3, -lambda * yt * UA3);
+  
+  
+  double UD3 = 2.*(yt2 + 3. * yb2);
+  
+  setTrilinearElement(DA, 3, 3, -lambda * yb * UD3);
+  
+  
+  double EA3 = 6.0;
+  //
+  setTrilinearElement(EA, 3, 3, -lambda * ytau * ytau2 * EA3);
+  
+}
 
 }
