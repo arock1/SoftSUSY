@@ -4332,7 +4332,7 @@ a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2);
 }
 
 ftPars::FGMCaseBNonRN(const MssmSusy & xx, double LAMBDA, 
-             double mMess,  double cgrav) {
+             double mMess, double eps, double cgrav) {
   
   // Modified thresholds by JEL 1-26-04 to accomodate numerical infinities
   
@@ -4407,8 +4407,18 @@ ftPars::FGMCaseBNonRN(const MssmSusy & xx, double LAMBDA,
   
   //Ql
 
-a8= f * sqr(lambda) *yb2*(-28./15.*g12-12.*g22 - 64./3.*g32 + 8.*yt2 + 72.*yb2 + 16*ytau2)/2. + f * sqr(lambda) *yt2*(-52./15.*g12-12.*g22 - 64./3.*g32 + 8.*yb2 + 72.*yt2)/2.;
-
+a0 = f * sqr(lambda) *(-5.333333333333333*g23*(yb*yb) + 6.*(yb*yb*yb*yb) - 5.333333333333333*g23*(yt*yt) + 2.*(yb*yb)*(yt*yt) + 6.*(yt*yt*yt*yt) - 
+   3.*g22*(yb*yb + yt*yt) - 0.06666666666666667*g12*(7.*(yb*yb) + 13.*(yt*yt)) + yb*yb*(ytau*ytau));
+a1 = f * sqr(lambda) *(0.025660011963983372*eps*(45.*g22*(yb*yb + yt*yt) + 80.*g23*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+     15.*(8.*(yb*yb*yb*yb) + 8.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
+a2 = f *sqr(lambda) *(0.018144368465060578*eps*(45.*g22*(yb*yb + yt*yt) + 80.*g23*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+     15.*(6.*(yb*yb*yb*yb) + 6.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
+a3 = f *sqr(lambda) *(0.025660011963983372*eps*(45.*g22*(yb*yb + yt*yt) + 80.*g23*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+     15.*(8.*(yb*yb*yb*yb) + 8.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
+a4 = f * sqr(lambda) * (-5.333333333333333*g23*(yb*yb) + 6.*(yb*yb*yb*yb) - 5.333333333333333*g23*(yt*yt) + 2.*(yb*yb)*(yt*yt) + 6.*(yt*yt*yt*yt) - 
+   3.*g22*(yb*yb + yt*yt) - 0.06666666666666667*g12*(7.*(yb*yb) + 13.*(yt*yt)) + yb*yb*(ytau*ytau));
+a6 = f* sqr(lambda) *(0.018144368465060578*eps*(45.*g22*(yb*yb + yt*yt) + 80.*g23*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+     15.*(6.*(yb*yb*yb*yb) + 6.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
   
   setSoftMassElement(mQl,1,1, mqlsq  + a0);
   setSoftMassElement(mQl,1,2, a1);
@@ -4423,7 +4433,12 @@ a8= f * sqr(lambda) *yb2*(-28./15.*g12-12.*g22 - 64./3.*g32 + 8.*yt2 + 72.*yb2 +
   
   //Ur
 
-a8=f * sqr(lambda) *yt2*(-52./15.*g12-12.*g22 - 64./3.*g32 + 8.*yb2 + 72.*yt2);
+a0 = f * sqr(lambda) *(0.13333333333333333*(yt*yt)*(-13.*g12 - 45.*g22 - 80.*g23 + 15.*(yb*yb) + 90.*(yt*yt)));
+a1 = f * sqr(lambda) *(0.051320023927966744*eps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g23 - 15.*(yb*yb + 8.*(yt*yt))));
+a2 = f * sqr(lambda) *(0.036288736930121156*eps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g23 - 15.*(yb*yb + 6.*(yt*yt))));
+a3 = f * sqr(lambda) *(0.051320023927966744*eps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g23 - 15.*(yb*yb + 8.*(yt*yt))));
+a4 = f * sqr(lambda) *(0.13333333333333333*(yt*yt)*(-13.*g12 - 45.*g22 - 80.*g23 + 15.*(yb*yb) + 90.*(yt*yt)));
+a6 = f * sqr(lambda) *(0.036288736930121156*eps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g23 - 15.*(yb*yb + 6.*(yt*yt))));
   
 /* 
 cout <<"UR"<<endl;
@@ -4451,7 +4466,14 @@ cout <<"a8="<<a8 <<endl;
   //Dr
 
 
-a8=f * sqr(lambda) *yb2*(-28./15.*g12-12.*g22 - 64./3.*g32 + 8.*yt2 + 72.*yb2 + 16*ytau2);
+a0 = f * sqr(lambda) *(769800358919501*eps*(yb*yb)*(yt*yt) + 0.13333333333333333*(yb*yb)*
+    (-7.*g12 + 5.*(-9.*g22 - 16.*g23 + 18.*(yb*yb) + 3.*(yt*yt) + 9.*(ytau*ytau))));
+a1 = f * sqr(lambda) *(0.025660011963983372*eps*(yb*yb)*(14.*g12 + 5.*(18.*g22 + 32.*g23 - 48.*(yb*yb) - 9.*(yt*yt) - 18.*(ytau*ytau))));
+a2 = f * sqr(lambda) *(0.036288736930121156*eps*(yb*yb)*(7.*g12 + 45.*g22 + 80.*g23 - 15.*(6.*(yb*yb) + yt*yt + 3.*(ytau*ytau))));
+a3 = f * sqr(lambda) *(0.025660011963983372*eps*(yb*yb)*(14.*g12 + 5.*(18.*g22 + 32.*g23 - 48.*(yb*yb) - 9.*(yt*yt) - 18.*(ytau*ytau))));
+a4 = f * sqr(lambda) *(-0.769800358919501*eps*(yb*yb)*(yt*yt) + 0.13333333333333333*(yb*yb)*
+    (-7.*g12 + 5.*(-9.*g22 - 16.*g23 + 18.*(yb*yb) + 3.*(yt*yt) + 9.*(ytau*ytau))));
+a6 = f * sqr(lambda) *(0.036288736930121156*eps*(yb*yb)*(7.*g12 + 45.*g22 + 80.*g23 - 15.*(6.*(yb*yb) + yt*yt + 3.*(ytau*ytau))));
 
   
   
@@ -4467,7 +4489,12 @@ a8=f * sqr(lambda) *yb2*(-28./15.*g12-12.*g22 - 64./3.*g32 + 8.*yt2 + 72.*yb2 + 
   
   //Ll
 
-a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2)/2.;
+a0 = f * sqr(lambda) *(-0.6*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 4.*(ytau*ytau*ytau*ytau));
+a1 = f * sqr(lambda) *(0.23094010767585035*eps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
+a2 = f * sqr(lambda) *(0.05443310539518174*eps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
+a3 = f * sqr(lambda) *(0.23094010767585035*eps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
+a4 = f * sqr(lambda) *(-0.6*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 4.*(ytau*ytau*ytau*ytau));
+a6 = f * sqr(lambda) *(0.05443310539518174*eps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
 
 
   setSoftMassElement(mLl,1,1, mllsq  + a0);
@@ -4482,7 +4509,13 @@ a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2)/2.;
   
   
   //Er
-a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2);
+
+a0 = f * sqr(lambda) *(-1.2*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 8.*(ytau*ytau*ytau*ytau));
+a1 = f * sqr(lambda) *(0.4618802153517007*eps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
+a2 = f * sqr(lambda) *(0.10886621079036347*eps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
+a3 = f * sqr(lambda) *(0.4618802153517007*eps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
+a4 = f * sqr(lambda) *(-1.2*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 8.*(ytau*ytau*ytau*ytau));
+a6 = f * sqr(lambda) *(0.10886621079036347*eps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
 
 
   
@@ -4497,28 +4530,26 @@ a8=f * sqr(lambda) *ytau2*(-7.2*g12-12.*g22 + 48.*yb2 + 40*ytau2);
   setSoftMassElement(mEr,3,3, mersq + a8);
   
   //higgs masses
-  double deltaHu = - f * sqr(lambda) * yt2* (18.*yt2 + 6.*yb2);
+  double deltaHu = 0.;
   
-  double deltaHd = - f * sqr(lambda) * (18.*yb2*yb2 + 6.*yb2*yt2 + 12. *ytau2 *ytau2);
+  double deltaHd = 0.;
   
   setMh1Squared(mllsq + deltaHd); //Hd
   setMh2Squared(mllsq + deltaHu); //Hu
   
   //trilinears
   
-  double UA3 = 2.*(yb2 + 3. * yt2);
   
-  setTrilinearElement(UA, 3, 3, -lambda * yt * UA3);
+  setTrilinearElement(UA, 1, 3, lambda * 0.2721655269759087*eps*yt*(yb*yb + yt*yt));
+  setTrilinearElement(UA, 3, 1, lambda * 0.5443310539518174*eps*(yt*yt*yt));
+  
+
+  setTrilinearElement(UD, 1, 3, lambda * 0.2721655269759087*eps*yb*(yb*yb + yt*yt));
+  setTrilinearElement(UA, 3, 1, lambda * 0.5443310539518174*eps*(yb*yb*yb));
   
   
-  double UD3 = 2.*(yt2 + 3. * yb2);
-  
-  setTrilinearElement(DA, 3, 3, -lambda * yb * UD3);
-  
-  
-  double EA3 = 6.0;
-  //
-  setTrilinearElement(EA, 3, 3, -lambda * ytau * ytau2 * EA3);
+  setTrilinearElement(EA, 1, 3, lambda * 0.2721655269759087*eps*(ytau*ytau*ytau));
+  setTrilinearElement(EA, 3, 1, lambda * 0.5443310539518174*eps*(ytau*ytau*ytau));
   
 }
 

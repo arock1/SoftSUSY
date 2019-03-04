@@ -39,6 +39,7 @@ void errorCall() {
   ii << "./softpoint.x nmssm sugra [NMSSM flags] [NMSSM parameters] [other options]\n\n";
   ii << "./softpoint.x FGMCaseB0 [mGMSB params]\n" ;
   ii << "./softpoint.x FGMCaseB1 [mGMSB params] [FGM params]\n" ;
+  ii << "./softpoint.x FGMCaseB1NonRN [mGMSB params] [FGM params]\n" ;
   ii << "./softpoint.x FGMCaseB1Large (B1 in infinite beta limit) [mGMSB params]\n" ;
   ii << "./softpoint.x FGMCaseB1Alt (Root 2 eigenvector in 2nd Column) [mGMSB params] [FGM params]\n" ;
   ii << "./softpoint.x FGMCaseB2 [mGMSB params] [FGM params]\n\n" ;
@@ -156,6 +157,7 @@ int main(int argc, char *argv[]) {
 		      strcmp(argv[1], "FGMCaseB1Large") &&
 		      strcmp(argv[1], "FGMCaseB1Alt") &&
 		      strcmp(argv[1], "FGMCaseB2") &&
+          strcmp(argv[1], "FGMCaseBNonRN") &&
 		      strcmp(argv[1], "runto") && 
 		      strcmp(argv[1], "leshouches") && 
                       strcmp(argv[1], "nmssm") &&
@@ -458,6 +460,30 @@ int main(int argc, char *argv[]) {
 	
 	r = &m; //telling it to flag the regular version
 	}
+      if (!strcmp(argv[1], "FGMCaseBNonRN")) {
+  cout << "# SOFTSUSY FGM CaseBNonRN" << endl;
+  
+  flavourViolation = true;
+  boundaryCondition = &FGMCaseBNonRNbcs;
+  modelIdent = "FGMCaseBNonRN";
+    printRuledOutSpectra = false;
+  pars.setEnd(3);
+  pars(1) = LAMBDA; pars(2) = mMess; pars(3) = eps; pars(4) = cgrav;
+  if (mMess < 1000.) {
+    ostringstream ii; 
+    ii << " mMess=" << mMess
+       << " in FGM input (too low). The point will not yield a sensible answer\n";
+    throw ii.str();
+  }
+  if (LAMBDA < 1000.) {
+    ostringstream ii; 
+    ii << " LAMBDA=" << LAMBDA
+       << " in FGM input (too low). The point will not yield a sensible answer\n";
+    throw ii.str();
+  }
+  
+  r = &m; //telling it to flag the regular version
+  }
 		    if (!strcmp(argv[1], "FGMCaseB1Alt")) {
 	cout << "# SOFTSUSY FGM CaseB1" << endl;
 	

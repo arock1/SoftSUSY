@@ -10665,6 +10665,12 @@ void MssmSoftsusy::minparSLHA(ostream & out, const char model [],
     out << "     2   "; printRow(out, pars.display(2)); out << "   # M_mess" << endl;
     out << "     6   "; printRow(out, pars.display(4)); out << "   # cgrav" << endl;
   }
+  else if (!strcmp(model,"FGMCaseBNonRN")){
+    out << "     1   "; printRow(out, pars.display(1)); out << "   # lambda" << endl;
+    out << "     2   "; printRow(out, pars.display(2)); out << "   # M_mess" << endl;
+    out << "     4   "; printRow(out, pars.display(3)); out << "   # eps" << endl;
+    out << "     6   "; printRow(out, pars.display(4)); out << "   # cgrav" << endl;
+  }
   else if (!strcmp(model,"FGMCaseB2")){
     out << "     1   "; printRow(out, pars.display(1)); out << "   # lambda" << endl;
     out << "     2   "; printRow(out, pars.display(2)); out << "   # M_mess" << endl;
