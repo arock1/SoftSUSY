@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
   RpvNeutrino kw; bool RPVflag = false;
   enum Model_t { MSSM, NMSSM } susy_model = MSSM; // susy model (MODSEL entry 3)
   double m0 = 0., m12 = 0., a0 = 0., m32 = 0., mMess = 0., n5 = 0.,
-    LAMBDA = 0., cgrav = 1., beta2 = 0., beta3 = 0.;
+    LAMBDA = 0., cgrav = 1., beta2 = 0., beta3 = 0., betaeps = 0.;
 	
   try {
     if (argc !=1 && strcmp(argv[1],"leshouches") != 0) {
@@ -280,6 +280,8 @@ int main(int argc, char *argv[]) {
 	  beta2 = get_value(argv[i], "--beta2=");}
 	  else if (starts_with(argv[i], "--beta3=")){
 	  beta3 = get_value(argv[i], "--beta3=");}
+    else if (starts_with(argv[i], "--betaeps=")){
+    betaeps = get_value(argv[i], "--betaeps=");}
 	  else badArg = i;
       if (badArg != 0 && strcmp(argv[1], "nmssm"))
 	cout << "Didn't understand argument " << argv[i] << endl;
@@ -467,8 +469,8 @@ int main(int argc, char *argv[]) {
   boundaryCondition = &FGMCaseBNonRNbcs;
   modelIdent = "FGMCaseBNonRN";
     printRuledOutSpectra = false;
-  pars.setEnd(3);
-  pars(1) = LAMBDA; pars(2) = mMess; pars(3) = eps; pars(4) = cgrav;
+  pars.setEnd(4);
+  pars(1) = LAMBDA; pars(2) = mMess; pars(3) = betaeps; pars(4) = cgrav;
   if (mMess < 1000.) {
     ostringstream ii; 
     ii << " mMess=" << mMess
@@ -482,7 +484,7 @@ int main(int argc, char *argv[]) {
     throw ii.str();
   }
   
-  r = &m; //telling it to flag the regular version
+  r = &k; //telling it to flag the regular version
   }
 		    if (!strcmp(argv[1], "FGMCaseB1Alt")) {
 	cout << "# SOFTSUSY FGM CaseB1" << endl;
