@@ -4409,15 +4409,15 @@ void MssmSoftPars::FGMCaseBNonRN(const MssmSusy & xx, double LAMBDA,
 
 a0 = f * sqr(lambda) *(-5.333333333333333*g32*(yb*yb) + 6.*(yb*yb*yb*yb) - 5.333333333333333*g32*(yt*yt) + 2.*(yb*yb)*(yt*yt) + 6.*(yt*yt*yt*yt) - 
    3.*g22*(yb*yb + yt*yt) - 0.06666666666666667*g12*(7.*(yb*yb) + 13.*(yt*yt)) + yb*yb*(ytau*ytau));
-a1 = f * sqr(lambda) *(0.025660011963983372*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+a1 = f * sqr(lambda) *(-0.025660011963983372*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
      15.*(8.*(yb*yb*yb*yb) + 8.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
-a2 = f *sqr(lambda) *(0.018144368465060578*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+a2 = f *sqr(lambda) *(-0.018144368465060578*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
      15.*(6.*(yb*yb*yb*yb) + 6.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
-a3 = f *sqr(lambda) *(0.025660011963983372*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+a3 = f *sqr(lambda) *(-0.025660011963983372*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
      15.*(8.*(yb*yb*yb*yb) + 8.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
 a4 = f * sqr(lambda) * (-5.333333333333333*g32*(yb*yb) + 6.*(yb*yb*yb*yb) - 5.333333333333333*g32*(yt*yt) + 2.*(yb*yb)*(yt*yt) + 6.*(yt*yt*yt*yt) - 
    3.*g22*(yb*yb + yt*yt) - 0.06666666666666667*g12*(7.*(yb*yb) + 13.*(yt*yt)) + yb*yb*(ytau*ytau));
-a6 = f* sqr(lambda) *(0.018144368465060578*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
+a6 = f* sqr(lambda) *(-0.018144368465060578*betaeps*(45.*g22*(yb*yb + yt*yt) + 80.*g32*(yb*yb + yt*yt) + g12*(7.*(yb*yb) + 13.*(yt*yt)) - 
      15.*(6.*(yb*yb*yb*yb) + 6.*(yt*yt*yt*yt) + yb*yb*(2.*(yt*yt) + ytau*ytau))));
   
   setSoftMassElement(mQl,1,1, mqlsq  + a0);
@@ -4434,11 +4434,11 @@ a6 = f* sqr(lambda) *(0.018144368465060578*betaeps*(45.*g22*(yb*yb + yt*yt) + 80
   //Ur
 
 a0 = f * sqr(lambda) *(0.13333333333333333*(yt*yt)*(-13.*g12 - 45.*g22 - 80.*g32 + 15.*(yb*yb) + 90.*(yt*yt)));
-a1 = f * sqr(lambda) *(0.051320023927966744*betaeps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(yb*yb + 8.*(yt*yt))));
-a2 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(yb*yb + 6.*(yt*yt))));
-a3 = f * sqr(lambda) *(0.051320023927966744*betaeps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(yb*yb + 8.*(yt*yt))));
+a1 = f * sqr(lambda) *(0.051320023927966744*betaeps*(yt*yt)*(-13.*g12 + 5.*(-9.*g22 - 16.*g32 + 3.*(yb*yb) + 24.*(yt*yt))));
+a2 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yt*yt)*(-13.*g12 - 45.*g22 - 80.*g32 + 15.*(yb*yb) + 90.*(yt*yt)));
+a3 = f * sqr(lambda) *(0.051320023927966744*betaeps*(yt*yt)*(-13.*g12 + 5.*(-9.*g22 - 16.*g32 + 3.*(yb*yb) + 24.*(yt*yt))));
 a4 = f * sqr(lambda) *(0.13333333333333333*(yt*yt)*(-13.*g12 - 45.*g22 - 80.*g32 + 15.*(yb*yb) + 90.*(yt*yt)));
-a6 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yt*yt)*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(yb*yb + 6.*(yt*yt))));
+a6 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yt*yt)*(-13.*g12 - 45.*g22 - 80.*g32 + 15.*(yb*yb) + 90.*(yt*yt)));
   
 /* 
 cout <<"UR"<<endl;
@@ -4466,14 +4466,14 @@ cout <<"a8="<<a8 <<endl;
   //Dr
 
 
-a0 = f * sqr(lambda) *(769800358919501*betaeps*(yb*yb)*(yt*yt) + 0.13333333333333333*(yb*yb)*
+a0 = f * sqr(lambda) *(0.769800358919501*betaeps*(yb*yb)*(yt*yt) + 0.13333333333333333*(yb*yb)*
     (-7.*g12 + 5.*(-9.*g22 - 16.*g32 + 18.*(yb*yb) + 3.*(yt*yt) + 9.*(ytau*ytau))));
-a1 = f * sqr(lambda) *(0.025660011963983372*betaeps*(yb*yb)*(14.*g12 + 5.*(18.*g22 + 32.*g32 - 48.*(yb*yb) - 9.*(yt*yt) - 18.*(ytau*ytau))));
-a2 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yb*yb)*(7.*g12 + 45.*g22 + 80.*g32 - 15.*(6.*(yb*yb) + yt*yt + 3.*(ytau*ytau))));
-a3 = f * sqr(lambda) *(0.025660011963983372*betaeps*(yb*yb)*(14.*g12 + 5.*(18.*g22 + 32.*g32 - 48.*(yb*yb) - 9.*(yt*yt) - 18.*(ytau*ytau))));
-a4 = f * sqr(lambda) *(-0.769800358919501*betaeps*(yb*yb)*(yt*yt) + 0.13333333333333333*(yb*yb)*
+a1 = f * sqr(lambda) *(0.025660011963983372*betaeps*(yb*yb)*(-14.*g12 + 5.*(-18.*g22 - 32.*g32 + 48.*(yb*yb) + 9.*(yt*yt) + 18.*(ytau*ytau))));
+a2 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yb*yb)*(-7.*g12 + 5.*(-9.*g22 - 16.*g32 + 18.*(yb*yb) + 3.*(yt*yt) + 9.*(ytau*ytau))));
+a3 = f * sqr(lambda) *(0.025660011963983372*betaeps*(yb*yb)*(-14.*g12 + 5.*(-18.*g22 - 32.*g32 + 48.*(yb*yb) + 9.*(yt*yt) + 18.*(ytau*ytau))));
+a4 = f * sqr(lambda) *(0.769800358919501*betaeps*(yb*yb)*(yt*yt) + 0.13333333333333333*(yb*yb)*
     (-7.*g12 + 5.*(-9.*g22 - 16.*g32 + 18.*(yb*yb) + 3.*(yt*yt) + 9.*(ytau*ytau))));
-a6 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yb*yb)*(7.*g12 + 45.*g22 + 80.*g32 - 15.*(6.*(yb*yb) + yt*yt + 3.*(ytau*ytau))));
+a6 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yb*yb)*(-7.*g12 + 5.*(-9.*g22 - 16.*g32 + 18.*(yb*yb) + 3.*(yt*yt) + 9.*(ytau*ytau))));
 
   
   
@@ -4490,11 +4490,11 @@ a6 = f * sqr(lambda) *(0.036288736930121156*betaeps*(yb*yb)*(7.*g12 + 45.*g22 + 
   //Ll
 
 a0 = f * sqr(lambda) *(-0.6*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 4.*(ytau*ytau*ytau*ytau));
-a1 = f * sqr(lambda) *(0.23094010767585035*betaeps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
-a2 = f * sqr(lambda) *(0.05443310539518174*betaeps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
-a3 = f * sqr(lambda) *(0.23094010767585035*betaeps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
+a1 = f * sqr(lambda) *(0.23094010767585035*betaeps*(ytau*ytau)*(-3.*g12 + 5.*(-1.*g22 + yb*yb + 2.*(ytau*ytau))));
+a2 = f * sqr(lambda) *(0.05443310539518174*betaeps*(ytau*ytau)*(-9.*g12 + 5.*(-3.*g22 + 3.*(yb*yb) + 4.*(ytau*ytau))));
+a3 = f * sqr(lambda) *(0.23094010767585035*betaeps*(ytau*ytau)*(-3.*g12 + 5.*(-1.*g22 + yb*yb + 2.*(ytau*ytau))));
 a4 = f * sqr(lambda) *(-0.6*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 4.*(ytau*ytau*ytau*ytau));
-a6 = f * sqr(lambda) *(0.05443310539518174*betaeps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
+a6 = f * sqr(lambda) *(0.05443310539518174*betaeps*(ytau*ytau)*(-9.*g12 + 5.*(-3.*g22 + 3.*(yb*yb) + 4.*(ytau*ytau))));
 
 
   setSoftMassElement(mLl,1,1, mllsq  + a0);
@@ -4511,11 +4511,11 @@ a6 = f * sqr(lambda) *(0.05443310539518174*betaeps*(ytau*ytau)*(9.*g12 + 5.*(3.*
   //Er
 
 a0 = f * sqr(lambda) *(-1.2*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 8.*(ytau*ytau*ytau*ytau));
-a1 = f * sqr(lambda) *(0.4618802153517007*betaeps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
-a2 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
-a3 = f * sqr(lambda) *(0.4618802153517007*betaeps*(ytau*ytau)*(3.*g12 + 5.*(g22 - 1.*(yb*yb) - 2.*(ytau*ytau))));
+a1 = f * sqr(lambda) *(0.4618802153517007*betaeps*(ytau*ytau)*(-3.*g12 + 5.*(-1.*g22 + yb*yb + 2.*(ytau*ytau))));
+a2 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(-9.*g12 + 5.*(-3.*g22 + 3.*(yb*yb) + 4.*(ytau*ytau))));
+a3 = f * sqr(lambda) *(0.4618802153517007*betaeps*(ytau*ytau)*(-3.*g12 + 5.*(-1.*g22 + yb*yb + 2.*(ytau*ytau))));
 a4 = f * sqr(lambda) *(-1.2*(3.*g12 + 5.*g22 - 5.*(yb*yb))*(ytau*ytau) + 8.*(ytau*ytau*ytau*ytau));
-a6 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(9.*g12 + 5.*(3.*g22 - 3.*(yb*yb) - 4.*(ytau*ytau))));
+a6 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(-9.*g12 + 5.*(-3.*g22 + 3.*(yb*yb) + 4.*(ytau*ytau))));
 
 
   
@@ -4540,16 +4540,16 @@ a6 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(9.*g12 + 5.*(3.*
   //trilinears
   
   
-  setTrilinearElement(UA, 1, 3, lambda * 0.2721655269759087*betaeps*yt*(yb*yb + yt*yt));
-  setTrilinearElement(UA, 3, 1, lambda * 0.5443310539518174*betaeps*(yt*yt*yt));
+  setTrilinearElement(UA, 1, 3, -lambda * 0.2721655269759087*betaeps*yt*(yb*yb + yt*yt));
+  setTrilinearElement(UA, 3, 1, -lambda * 0.5443310539518174*betaeps*(yt*yt*yt));
   
 
-  setTrilinearElement(DA, 1, 3, lambda * 0.2721655269759087*betaeps*yb*(yb*yb + yt*yt));
-  setTrilinearElement(DA, 3, 1, lambda * 0.5443310539518174*betaeps*(yb*yb*yb));
+  setTrilinearElement(DA, 1, 3, -lambda * 0.2721655269759087*betaeps*yb*(yb*yb + yt*yt));
+  setTrilinearElement(DA, 3, 1, -lambda * 0.5443310539518174*betaeps*(yb*yb*yb));
   
   
-  setTrilinearElement(EA, 1, 3, lambda * 0.2721655269759087*betaeps*(ytau*ytau*ytau));
-  setTrilinearElement(EA, 3, 1, lambda * 0.5443310539518174*betaeps*(ytau*ytau*ytau));
+  setTrilinearElement(EA, 1, 3, -lambda * 0.2721655269759087*betaeps*(ytau*ytau*ytau));
+  setTrilinearElement(EA, 3, 1, -lambda * 0.5443310539518174*betaeps*(ytau*ytau*ytau));
   
 }
 
