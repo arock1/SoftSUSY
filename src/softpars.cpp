@@ -4553,7 +4553,7 @@ a6 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(-9.*g12 + 5.*(-3
   
 }
 void MssmSoftPars::FGMCaseBNonRN1(const MssmSusy & xx, double LAMBDA, 
-             double mMess, double beta2, double beta3, double betaeps double cgrav) {
+             double mMess, double beta2, double beta3, double betaeps, double cgrav) {
   
   // Modified thresholds by JEL 1-26-04 to accomodate numerical infinities
   
@@ -5875,23 +5875,23 @@ a8= f * sqr(lambda) * ((0.8*(-72.*g12*pow(ytau,2) + 108.*pow(beta2,2)*g12*pow(yt
   
 
   
-  setTrilinearElement(UA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*yt*(yb + yt))/(Sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
+  setTrilinearElement(UA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*yt*(yb + yt))/(sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
   setTrilinearElement(UA, 2, 3, lambda*(-4.242640687119286*beta3*(-1. + pow(beta3,2))*yt*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2));
-  setTrilinearElement(UA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(yt,2))/((2. + pow(beta2,2))*Sqrt(2. + pow(beta3,2))));
+  setTrilinearElement(UA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(yt,2))/((2. + pow(beta2,2))*sqrt(2. + pow(beta3,2))));
   setTrilinearElement(UA, 3, 2, lambda *(-8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(yt,3))/pow(2. + pow(beta2,2),2));  
   setTrilinearElement(UA, 3, 3, lambda *((-4.*pow(-1. + pow(beta2,2),2)*pow(yt,3))/pow(2. + pow(beta2,2),2) - 
    (2.*pow(-1. + pow(beta3,2),2)*yt*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2)));
 
-  setTrilinearElement(DA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*yb*(yb + yt))/(Sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
+  setTrilinearElement(DA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*yb*(yb + yt))/(sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
   setTrilinearElement(DA, 2, 3, lambda*(-4.242640687119286*beta3*(-1. + pow(beta3,2))*yb*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2));
-  setTrilinearElement(DA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(yb,2))/((2. + pow(beta2,2))*Sqrt(2. + pow(beta3,2))));
+  setTrilinearElement(DA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(yb,2))/((2. + pow(beta2,2))*sqrt(2. + pow(beta3,2))));
   setTrilinearElement(DA, 3, 2, lambda *(-8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(yb,3))/pow(2. + pow(beta2,2),2));  
   setTrilinearElement(DA, 3, 3, lambda *((-4.*pow(-1. + pow(beta2,2),2)*pow(yb,3))/pow(2. + pow(beta2,2),2) - 
    (2.*pow(-1. + pow(beta3,2),2)*yb*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2))); 
   
-  setTrilinearElement(EA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*pow(ytau,2))/(Sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
+  setTrilinearElement(EA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*pow(ytau,2))/(sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
   setTrilinearElement(EA, 2, 3, lambda*(-4.242640687119286*beta3*(-1. + pow(beta3,2))*pow(ytau,3))/pow(2. + pow(beta3,2),2));
-  setTrilinearElement(EA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(ytau,2))/((2. + pow(beta2,2))*Sqrt(2. + pow(beta3,2))));
+  setTrilinearElement(EA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(ytau,2))/((2. + pow(beta2,2))*sqrt(2. + pow(beta3,2))));
   setTrilinearElement(EA, 3, 2, lambda *(-8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(ytau,3))/pow(2. + pow(beta2,2),2));  
   setTrilinearElement(EA, 3, 3, lambda *((-4.*pow(-1. + pow(beta2,2),2)*pow(ytau,3))/pow(2. + pow(beta2,2),2) - 
    (2.*pow(-1. + pow(beta3,2),2)*pow(ytau,3))/pow(2. + pow(beta3,2),2))); 
