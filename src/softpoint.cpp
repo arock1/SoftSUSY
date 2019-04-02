@@ -158,6 +158,7 @@ int main(int argc, char *argv[]) {
 		      strcmp(argv[1], "FGMCaseB1Alt") &&
 		      strcmp(argv[1], "FGMCaseB2") &&
           strcmp(argv[1], "FGMCaseBNonRN") &&
+          strcmp(argv[1], "FGMCaseBNonRN1") &&
 		      strcmp(argv[1], "runto") && 
 		      strcmp(argv[1], "leshouches") && 
                       strcmp(argv[1], "nmssm") &&
@@ -471,6 +472,30 @@ int main(int argc, char *argv[]) {
     printRuledOutSpectra = false;
   pars.setEnd(4);
   pars(1) = LAMBDA; pars(2) = mMess; pars(3) = betaeps; pars(4) = cgrav;
+  if (mMess < 1000.) {
+    ostringstream ii; 
+    ii << " mMess=" << mMess
+       << " in FGM input (too low). The point will not yield a sensible answer\n";
+    throw ii.str();
+  }
+  if (LAMBDA < 1000.) {
+    ostringstream ii; 
+    ii << " LAMBDA=" << LAMBDA
+       << " in FGM input (too low). The point will not yield a sensible answer\n";
+    throw ii.str();
+  }
+  
+  r = &k; //telling it to flag the regular version
+  }
+      if (!strcmp(argv[1], "FGMCaseBNonRN1")) {
+  cout << "# SOFTSUSY FGM CaseBNonRN" << endl;
+  
+  flavourViolation = true;
+  boundaryCondition = &FGMCaseBNonRN1bcs;
+  modelIdent = "FGMCaseBNonRN1";
+    printRuledOutSpectra = false;
+  pars.setEnd(6);
+  pars(1) = LAMBDA; pars(2) = mMess; pars(3) = beta2; pars(4) = beta3; pars(5) = betaeps; pars(6) = cgrav;
   if (mMess < 1000.) {
     ostringstream ii; 
     ii << " mMess=" << mMess

@@ -966,6 +966,14 @@ void FlavourMssmSoftsusy::minparSLHA(ostream & out, const char model [],
     out << "     4   "; printRow(out, pars.display(3)); out << "   # betaeps" << endl;
     out << "     6   "; printRow(out, pars.display(4)); out << "   # cgrav" << endl;
   }
+  else if (!strcmp(model,"FGMCaseBNonRN1")){
+    out << "     1   "; printRow(out, pars.display(1)); out << "   # lambda" << endl;
+    out << "     2   "; printRow(out, pars.display(2)); out << "   # M_mess" << endl;
+    out << "     4   "; printRow(out, pars.display(3)); out << "   # beta2" << endl;
+    out << "     5   "; printRow(out, pars.display(3)); out << "   # beta3" << endl;
+    out << "     6   "; printRow(out, pars.display(3)); out << "   # betaeps" << endl;
+    out << "     7   "; printRow(out, pars.display(4)); out << "   # cgrav" << endl;
+  }
    else if (!strcmp(model,"FGMCaseB1Alt")){
     out << "     1   "; printRow(out, pars.display(1)); out << "   # lambda" << endl;
     out << "     2   "; printRow(out, pars.display(2)); out << "   # M_mess" << endl;

@@ -196,10 +196,12 @@ namespace softsusy {
     return;
   }
     void FGMCaseBNonRNbcs(MssmSoftsusy & m, const DoubleVector & inputParameters) {
-    double alpha  = inputParameters.display(1);
-    double M0  = inputParameters.display(2);
-    double nM = inputParameters.display(3);
     m.FGMCaseBNonRN(m.displayMssmSusy(), inputParameters(1), inputParameters(2), inputParameters(3), inputParameters(4));
+
+    return;
+  }
+    void FGMCaseBNonRN1bcs(MssmSoftsusy & m, const DoubleVector & inputParameters) {
+    m.FGMCaseBNonRN1(m.displayMssmSusy(), inputParameters(1), inputParameters(2), inputParameters(3), inputParameters(4), inputParameters(5), inputParameters(6));
 
     return;
   }

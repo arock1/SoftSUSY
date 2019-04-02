@@ -4552,5 +4552,1349 @@ a6 = f * sqr(lambda) *(0.10886621079036347*betaeps*(ytau*ytau)*(-9.*g12 + 5.*(-3
   setTrilinearElement(EA, 3, 1, -lambda * 0.5443310539518174*betaeps*(ytau*ytau*ytau));
   
 }
+void MssmSoftPars::FGMCaseBNonRN1(const MssmSusy & xx, double LAMBDA, 
+             double mMess, double beta2, double beta3, double betaeps double cgrav) {
+  
+  // Modified thresholds by JEL 1-26-04 to accomodate numerical infinities
+  
+  const double epstol = 1.0e-4;
+  double x = LAMBDA / mMess;
+  double lambda = LAMBDA/(16.0 * sqr(PI));
+  
+  double f, g;
+  
+  if(fabs(x) < epstol) { /// hep-ph/9801271
+    g = 1.0 + x*x/6.0 + sqr(x*x)/15.0;
+    f = 1.0 + x*x/36.0 - 11.0*sqr(x*x)/450.0;
+  }
+  else if(fabs(x-1.0) < 0.0001) {
+    g  =  log(4.0);
+    f  = -sqr(PI)/6.0 + log(4.0) + 0.5*sqr(log(4.0));
+    g -=  0.0008132638905771205626;
+    f -= -0.0049563838821509165200;
+  }
+  else {
+    g = 1.0 / sqr(x) * 
+      ((1.0 + x) * log(1.0 + x) + (1.0 - x) * log(1.0 - x));
+    f = (1.0 + x) / sqr(x) * 
+      (log(1.0 + x) - 2.0 * dilog(x / (1.0 + x)) + 0.5 * 
+       dilog(2.0 * x / (1.0 + x))) + 
+      (1.0 - x) / sqr(x) * (log(1.0 - x) - 2.0 * dilog(-x / (1.0 - x)) +
+          0.5 * dilog(-2.0 * x / (1.0 - x)));
+  }
+  
+  double n5d = 2;
+  
+  double g12 = sqr(xx.displayGaugeCoupling(1));
+  double g22 = sqr(xx.displayGaugeCoupling(2));
+  double g32 = sqr(xx.displayGaugeCoupling(3));
+  
+  double yt = xx.displayYukawaElement(YU,3,3); 
+  double yb = xx.displayYukawaElement(YD,3,3); 
+  double ytau = xx.displayYukawaElement(YE,3,3);
+  
+  
+  /// There is a relative minus in the mGMSB conditions for gaugino masses,
+  /// since these equations are for L=-M/2 gaugino gaugino. See hep-ph/9801271:
+  /// BCA 27/7/12
+  double m1, m2, m3;
+  m1 = n5d * g12 * lambda * g; 
+  m2 = n5d * g22 * lambda * g; 
+  m3 = n5d * g32 * lambda * g; 
+  setGauginoMass(1, m1);   setGauginoMass(2, m2);   setGauginoMass(3, m3);
+  
+  setM32(2.37e-19 * LAMBDA * mMess * cgrav);
+  
+  double g1f = sqr(g12);
+  double g2f = sqr(g22);
+  double g3f = sqr(g32);
+  
+  double mursq, mdrsq, mersq, mqlsq, mllsq;
+  mursq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.6 * 4.0 / 9.0 * g1f);
+  mdrsq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.6 * 1.0 / 9.0 * g1f);
+  mersq = 2.0 * f * sqr(lambda) * n5d * 
+    (0.6 * g1f);
+  mqlsq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.75 * g2f + 0.6 * g1f / 36.0);
+  mllsq = 2.0 * f * sqr(lambda) * n5d * 
+    (0.75 * g2f + 0.6 * 0.25 * g1f) ;
+  
+  double a0 = 0.,a1 = 0.,a2 = 0.,a3 = 0.,a4 = 0.,a5 = 0.,a6 = 0.,a7 = 0.,a8 = 0.;
+  
+  //Ql
+a0= f * sqr(lambda) * ((0.2*(-56.*g12*pow(yb,2) - 56.*pow(beta2,2)*g12*pow(yb,2) - 14.*pow(beta2,4)*g12*pow(yb,2) - 
+       28.*pow(beta3,2)*g12*pow(yb,2) - 28.*pow(beta2,2)*pow(beta3,2)*g12*pow(yb,2) - 
+       7.*pow(beta2,4)*pow(beta3,2)*g12*pow(yb,2) - 360.*g22*pow(yb,2) - 360.*pow(beta2,2)*g22*pow(yb,2) - 
+       90.*pow(beta2,4)*g22*pow(yb,2) - 180.*pow(beta3,2)*g22*pow(yb,2) - 180.*pow(beta2,2)*pow(beta3,2)*g22*pow(yb,2) - 
+       45.*pow(beta2,4)*pow(beta3,2)*g22*pow(yb,2) - 640.*g32*pow(yb,2) - 640.*pow(beta2,2)*g32*pow(yb,2) - 
+       160.*pow(beta2,4)*g32*pow(yb,2) - 320.*pow(beta3,2)*g32*pow(yb,2) - 
+       320.*pow(beta2,2)*pow(beta3,2)*g32*pow(yb,2) - 80.*pow(beta2,4)*pow(beta3,2)*g32*pow(yb,2) + 975.*pow(yb,4) + 
+       570.*pow(beta2,2)*pow(yb,4) + 345.*pow(beta2,4)*pow(yb,4) + 240.*pow(beta3,2)*pow(yb,4) + 
+       240.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) + 60.*pow(beta2,4)*pow(beta3,2)*pow(yb,4) - 104.*g12*pow(yt,2) - 
+       104.*pow(beta2,2)*g12*pow(yt,2) - 26.*pow(beta2,4)*g12*pow(yt,2) - 52.*pow(beta3,2)*g12*pow(yt,2) - 
+       52.*pow(beta2,2)*pow(beta3,2)*g12*pow(yt,2) - 13.*pow(beta2,4)*pow(beta3,2)*g12*pow(yt,2) - 360.*g22*pow(yt,2) - 
+       360.*pow(beta2,2)*g22*pow(yt,2) - 90.*pow(beta2,4)*g22*pow(yt,2) - 180.*pow(beta3,2)*g22*pow(yt,2) - 
+       180.*pow(beta2,2)*pow(beta3,2)*g22*pow(yt,2) - 45.*pow(beta2,4)*pow(beta3,2)*g22*pow(yt,2) - 640.*g32*pow(yt,2) - 
+       640.*pow(beta2,2)*g32*pow(yt,2) - 160.*pow(beta2,4)*g32*pow(yt,2) - 320.*pow(beta3,2)*g32*pow(yt,2) - 
+       320.*pow(beta2,2)*pow(beta3,2)*g32*pow(yt,2) - 80.*pow(beta2,4)*pow(beta3,2)*g32*pow(yt,2) + 
+       300.*pow(yb,2)*pow(yt,2) + 120.*pow(beta2,2)*pow(yb,2)*pow(yt,2) + 120.*pow(beta2,4)*pow(yb,2)*pow(yt,2) + 
+       150.*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 60.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 
+       60.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 975.*pow(yt,4) + 570.*pow(beta2,2)*pow(yt,4) + 
+       345.*pow(beta2,4)*pow(yt,4) + 240.*pow(beta3,2)*pow(yt,4) + 240.*pow(beta2,2)*pow(beta3,2)*pow(yt,4) + 
+       60.*pow(beta2,4)*pow(beta3,2)*pow(yt,4) + 135.*pow(yb,2)*pow(ytau,2) + 90.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       45.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) + 45.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       90.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2)))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a1= f * sqr(lambda) *((-0.13333333333333333*betaeps*(-48.49742261192856*beta3*g12*yb - 24.24871130596428*pow(beta2,2)*beta3*g12*yb - 
+       24.24871130596428*pow(beta3,3)*g12*yb - 12.12435565298214*pow(beta2,2)*pow(beta3,3)*g12*yb - 
+       311.7691453623979*beta3*g22*yb - 155.88457268119896*pow(beta2,2)*beta3*g22*yb - 155.88457268119896*pow(beta3,3)*g22*yb - 
+       77.94228634059948*pow(beta2,2)*pow(beta3,3)*g22*yb - 554.2562584220407*beta3*g32*yb - 
+       277.12812921102034*pow(beta2,2)*beta3*g32*yb - 277.12812921102034*pow(beta3,3)*g32*yb - 
+       138.56406460551017*pow(beta2,2)*pow(beta3,3)*g32*yb + 1117.1727708819258*beta3*pow(yb,3) - 
+       25.980762113533157*pow(beta2,2)*beta3*pow(yb,3) + 597.5575286112627*pow(beta3,3)*pow(yb,3) + 
+       181.8653347947321*pow(beta2,2)*pow(beta3,3)*pow(yb,3) - 90.06664199358161*beta3*g12*yt - 
+       45.033320996790806*pow(beta2,2)*beta3*g12*yt - 45.033320996790806*pow(beta3,3)*g12*yt - 
+       22.516660498395403*pow(beta2,2)*pow(beta3,3)*g12*yt - 311.7691453623979*beta3*g22*yt - 
+       155.88457268119896*pow(beta2,2)*beta3*g22*yt - 155.88457268119896*pow(beta3,3)*g22*yt - 
+       77.94228634059948*pow(beta2,2)*pow(beta3,3)*g22*yt - 554.2562584220407*beta3*g32*yt - 
+       277.12812921102034*pow(beta2,2)*beta3*g32*yt - 277.12812921102034*pow(beta3,3)*g32*yt - 
+       138.56406460551017*pow(beta2,2)*pow(beta3,3)*g32*yt + 207.84609690826525*beta3*pow(yb,2)*yt - 
+       51.96152422706631*pow(beta2,2)*beta3*pow(yb,2)*yt + 103.92304845413263*pow(beta3,3)*pow(yb,2)*yt - 
+       25.980762113533157*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*yt + 207.84609690826525*beta3*yb*pow(yt,2) - 
+       51.96152422706631*pow(beta2,2)*beta3*yb*pow(yt,2) + 103.92304845413263*pow(beta3,3)*yb*pow(yt,2) - 
+       25.980762113533157*pow(beta2,2)*pow(beta3,3)*yb*pow(yt,2) + 1117.1727708819258*beta3*pow(yt,3) - 
+       25.980762113533157*pow(beta2,2)*beta3*pow(yt,3) + 597.5575286112627*pow(beta3,3)*pow(yt,3) + 
+       181.8653347947321*pow(beta2,2)*pow(beta3,3)*pow(yt,3) + 155.88457268119896*beta3*pow(yb,2)*ytau - 
+       155.88457268119896*pow(beta2,2)*beta3*pow(yb,2)*ytau + 77.94228634059948*beta3*yb*pow(ytau,2) + 
+       77.94228634059948*pow(beta2,2)*beta3*yb*pow(ytau,2) + 77.94228634059948*pow(beta3,3)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a2= f * sqr(lambda) * ((0.06666666666666667*betaeps*(68.58571279792898*pow(beta3,2)*g12*yb + 34.29285639896449*pow(beta2,2)*pow(beta3,2)*g12*yb + 
+       34.29285639896449*pow(beta3,4)*g12*yb + 17.146428199482244*pow(beta2,2)*pow(beta3,4)*g12*yb + 
+       440.90815370097204*pow(beta3,2)*g22*yb + 220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yb + 
+       220.45407685048602*pow(beta3,4)*g22*yb + 110.22703842524301*pow(beta2,2)*pow(beta3,4)*g22*yb + 
+       783.836717690617*pow(beta3,2)*g32*yb + 391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yb + 
+       391.9183588453085*pow(beta3,4)*g32*yb + 195.95917942265424*pow(beta2,2)*pow(beta3,4)*g32*yb - 
+       146.96938456699067*pow(yb,3) + 146.96938456699067*pow(beta2,2)*pow(yb,3) - 1432.951499528159*pow(beta3,2)*pow(yb,3) + 
+       330.68111527572904*pow(beta2,2)*pow(beta3,2)*pow(yb,3) - 734.8469228349534*pow(beta3,4)*pow(yb,3) - 
+       146.96938456699067*pow(beta2,2)*pow(beta3,4)*pow(yb,3) + 127.37346662472525*pow(beta3,2)*g12*yt + 
+       63.68673331236263*pow(beta2,2)*pow(beta3,2)*g12*yt + 63.68673331236263*pow(beta3,4)*g12*yt + 
+       31.843366656181313*pow(beta2,2)*pow(beta3,4)*g12*yt + 440.90815370097204*pow(beta3,2)*g22*yt + 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yt + 220.45407685048602*pow(beta3,4)*g22*yt + 
+       110.22703842524301*pow(beta2,2)*pow(beta3,4)*g22*yt + 783.836717690617*pow(beta3,2)*g32*yt + 
+       391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yt + 391.9183588453085*pow(beta3,4)*g32*yt + 
+       195.95917942265424*pow(beta2,2)*pow(beta3,4)*g32*yt + 146.96938456699067*pow(yb,2)*yt - 
+       146.96938456699067*pow(beta2,2)*pow(yb,2)*yt - 146.96938456699067*pow(beta3,2)*pow(yb,2)*yt - 
+       73.48469228349533*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*yt - 110.22703842524301*pow(beta3,4)*pow(yb,2)*yt + 
+       146.96938456699067*yb*pow(yt,2) - 146.96938456699067*pow(beta2,2)*yb*pow(yt,2) - 
+       146.96938456699067*pow(beta3,2)*yb*pow(yt,2) - 73.48469228349533*pow(beta2,2)*pow(beta3,2)*yb*pow(yt,2) - 
+       110.22703842524301*pow(beta3,4)*yb*pow(yt,2) - 146.96938456699067*pow(yt,3) + 
+       146.96938456699067*pow(beta2,2)*pow(yt,3) - 1432.951499528159*pow(beta3,2)*pow(yt,3) + 
+       330.68111527572904*pow(beta2,2)*pow(beta3,2)*pow(yt,3) - 734.8469228349534*pow(beta3,4)*pow(yt,3) - 
+       146.96938456699067*pow(beta2,2)*pow(beta3,4)*pow(yt,3) - 220.45407685048602*pow(beta3,2)*pow(yb,2)*ytau + 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau - 110.22703842524301*pow(beta3,2)*yb*pow(ytau,2) - 
+       110.22703842524301*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) - 110.22703842524301*pow(beta3,4)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a3= f * sqr(lambda) * ((-0.13333333333333333*betaeps*(-48.49742261192856*beta3*g12*yb - 24.24871130596428*pow(beta2,2)*beta3*g12*yb - 
+       24.24871130596428*pow(beta3,3)*g12*yb - 12.12435565298214*pow(beta2,2)*pow(beta3,3)*g12*yb - 
+       311.7691453623979*beta3*g22*yb - 155.88457268119896*pow(beta2,2)*beta3*g22*yb - 155.88457268119896*pow(beta3,3)*g22*yb - 
+       77.94228634059948*pow(beta2,2)*pow(beta3,3)*g22*yb - 554.2562584220407*beta3*g32*yb - 
+       277.12812921102034*pow(beta2,2)*beta3*g32*yb - 277.12812921102034*pow(beta3,3)*g32*yb - 
+       138.56406460551017*pow(beta2,2)*pow(beta3,3)*g32*yb + 1117.1727708819258*beta3*pow(yb,3) - 
+       25.980762113533157*pow(beta2,2)*beta3*pow(yb,3) + 597.5575286112627*pow(beta3,3)*pow(yb,3) + 
+       181.8653347947321*pow(beta2,2)*pow(beta3,3)*pow(yb,3) - 90.06664199358161*beta3*g12*yt - 
+       45.033320996790806*pow(beta2,2)*beta3*g12*yt - 45.033320996790806*pow(beta3,3)*g12*yt - 
+       22.516660498395403*pow(beta2,2)*pow(beta3,3)*g12*yt - 311.7691453623979*beta3*g22*yt - 
+       155.88457268119896*pow(beta2,2)*beta3*g22*yt - 155.88457268119896*pow(beta3,3)*g22*yt - 
+       77.94228634059948*pow(beta2,2)*pow(beta3,3)*g22*yt - 554.2562584220407*beta3*g32*yt - 
+       277.12812921102034*pow(beta2,2)*beta3*g32*yt - 277.12812921102034*pow(beta3,3)*g32*yt - 
+       138.56406460551017*pow(beta2,2)*pow(beta3,3)*g32*yt + 207.84609690826525*beta3*pow(yb,2)*yt - 
+       51.96152422706631*pow(beta2,2)*beta3*pow(yb,2)*yt + 103.92304845413263*pow(beta3,3)*pow(yb,2)*yt - 
+       25.980762113533157*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*yt + 207.84609690826525*beta3*yb*pow(yt,2) - 
+       51.96152422706631*pow(beta2,2)*beta3*yb*pow(yt,2) + 103.92304845413263*pow(beta3,3)*yb*pow(yt,2) - 
+       25.980762113533157*pow(beta2,2)*pow(beta3,3)*yb*pow(yt,2) + 1117.1727708819258*beta3*pow(yt,3) - 
+       25.980762113533157*pow(beta2,2)*beta3*pow(yt,3) + 597.5575286112627*pow(beta3,3)*pow(yt,3) + 
+       181.8653347947321*pow(beta2,2)*pow(beta3,3)*pow(yt,3) + 155.88457268119896*beta3*pow(yb,2)*ytau - 
+       155.88457268119896*pow(beta2,2)*beta3*pow(yb,2)*ytau + 77.94228634059948*beta3*yb*pow(ytau,2) + 
+       77.94228634059948*pow(beta2,2)*beta3*yb*pow(ytau,2) + 77.94228634059948*pow(beta3,3)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a4= f * sqr(lambda) * ((0.6*(-56.*pow(beta3,2)*g12*pow(yb,2) - 56.*pow(beta2,2)*pow(beta3,2)*g12*pow(yb,2) - 
+       14.*pow(beta2,4)*pow(beta3,2)*g12*pow(yb,2) - 28.*pow(beta3,4)*g12*pow(yb,2) - 
+       28.*pow(beta2,2)*pow(beta3,4)*g12*pow(yb,2) - 7.*pow(beta2,4)*pow(beta3,4)*g12*pow(yb,2) - 
+       360.*pow(beta3,2)*g22*pow(yb,2) - 360.*pow(beta2,2)*pow(beta3,2)*g22*pow(yb,2) - 
+       90.*pow(beta2,4)*pow(beta3,2)*g22*pow(yb,2) - 180.*pow(beta3,4)*g22*pow(yb,2) - 
+       180.*pow(beta2,2)*pow(beta3,4)*g22*pow(yb,2) - 45.*pow(beta2,4)*pow(beta3,4)*g22*pow(yb,2) - 
+       640.*pow(beta3,2)*g32*pow(yb,2) - 640.*pow(beta2,2)*pow(beta3,2)*g32*pow(yb,2) - 
+       160.*pow(beta2,4)*pow(beta3,2)*g32*pow(yb,2) - 320.*pow(beta3,4)*g32*pow(yb,2) - 
+       320.*pow(beta2,2)*pow(beta3,4)*g32*pow(yb,2) - 80.*pow(beta2,4)*pow(beta3,4)*g32*pow(yb,2) + 
+       645.*pow(beta3,2)*pow(yb,4) + 510.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) + 
+       195.*pow(beta2,4)*pow(beta3,2)*pow(yb,4) + 570.*pow(beta3,4)*pow(yb,4) + 
+       300.*pow(beta2,2)*pow(beta3,4)*pow(yb,4) + 210.*pow(beta2,4)*pow(beta3,4)*pow(yb,4) - 
+       104.*pow(beta3,2)*g12*pow(yt,2) - 104.*pow(beta2,2)*pow(beta3,2)*g12*pow(yt,2) - 
+       26.*pow(beta2,4)*pow(beta3,2)*g12*pow(yt,2) - 52.*pow(beta3,4)*g12*pow(yt,2) - 
+       52.*pow(beta2,2)*pow(beta3,4)*g12*pow(yt,2) - 13.*pow(beta2,4)*pow(beta3,4)*g12*pow(yt,2) - 
+       360.*pow(beta3,2)*g22*pow(yt,2) - 360.*pow(beta2,2)*pow(beta3,2)*g22*pow(yt,2) - 
+       90.*pow(beta2,4)*pow(beta3,2)*g22*pow(yt,2) - 180.*pow(beta3,4)*g22*pow(yt,2) - 
+       180.*pow(beta2,2)*pow(beta3,4)*g22*pow(yt,2) - 45.*pow(beta2,4)*pow(beta3,4)*g22*pow(yt,2) - 
+       640.*pow(beta3,2)*g32*pow(yt,2) - 640.*pow(beta2,2)*pow(beta3,2)*g32*pow(yt,2) - 
+       160.*pow(beta2,4)*pow(beta3,2)*g32*pow(yt,2) - 320.*pow(beta3,4)*g32*pow(yt,2) - 
+       320.*pow(beta2,2)*pow(beta3,4)*g32*pow(yt,2) - 80.*pow(beta2,4)*pow(beta3,4)*g32*pow(yt,2) + 
+       300.*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 120.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 
+       120.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 150.*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       60.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 60.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       645.*pow(beta3,2)*pow(yt,4) + 510.*pow(beta2,2)*pow(beta3,2)*pow(yt,4) + 
+       195.*pow(beta2,4)*pow(beta3,2)*pow(yt,4) + 570.*pow(beta3,4)*pow(yt,4) + 
+       300.*pow(beta2,2)*pow(beta3,4)*pow(yt,4) + 210.*pow(beta2,4)*pow(beta3,4)*pow(yt,4) + 
+       105.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 150.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       15.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 75.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 30.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));
+a5= f * sqr(lambda) * ((0.2*(79.19595949289332*beta3*g12*pow(yb,2) + 79.19595949289332*pow(beta2,2)*beta3*g12*pow(yb,2) + 
+       19.79898987322333*pow(beta2,4)*beta3*g12*pow(yb,2) - 39.59797974644666*pow(beta3,3)*g12*pow(yb,2) - 
+       39.59797974644666*pow(beta2,2)*pow(beta3,3)*g12*pow(yb,2) - 
+       9.899494936611665*pow(beta2,4)*pow(beta3,3)*g12*pow(yb,2) - 39.59797974644666*pow(beta3,5)*g12*pow(yb,2) - 
+       39.59797974644666*pow(beta2,2)*pow(beta3,5)*g12*pow(yb,2) - 
+       9.899494936611665*pow(beta2,4)*pow(beta3,5)*g12*pow(yb,2) + 509.11688245431424*beta3*g22*pow(yb,2) + 
+       509.11688245431424*pow(beta2,2)*beta3*g22*pow(yb,2) + 127.27922061357856*pow(beta2,4)*beta3*g22*pow(yb,2) - 
+       254.55844122715712*pow(beta3,3)*g22*pow(yb,2) - 254.55844122715712*pow(beta2,2)*pow(beta3,3)*g22*pow(yb,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,3)*g22*pow(yb,2) - 254.55844122715712*pow(beta3,5)*g22*pow(yb,2) - 
+       254.55844122715712*pow(beta2,2)*pow(beta3,5)*g22*pow(yb,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*g22*pow(yb,2) + 905.0966799187809*beta3*g32*pow(yb,2) + 
+       905.0966799187809*pow(beta2,2)*beta3*g32*pow(yb,2) + 226.27416997969522*pow(beta2,4)*beta3*g32*pow(yb,2) - 
+       452.54833995939043*pow(beta3,3)*g32*pow(yb,2) - 452.54833995939043*pow(beta2,2)*pow(beta3,3)*g32*pow(yb,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,3)*g32*pow(yb,2) - 452.54833995939043*pow(beta3,5)*g32*pow(yb,2) - 
+       452.54833995939043*pow(beta2,2)*pow(beta3,5)*g32*pow(yb,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,5)*g32*pow(yb,2) - 1039.4469683442248*beta3*pow(yb,4) - 
+       466.6904755831214*pow(beta2,2)*beta3*pow(yb,4) - 403.0508652763321*pow(beta2,4)*beta3*pow(yb,4) + 
+       169.7056274847714*pow(beta3,3)*pow(yb,4) + 169.7056274847714*pow(beta2,2)*pow(beta3,3)*pow(yb,4) + 
+       42.42640687119285*pow(beta2,4)*pow(beta3,3)*pow(yb,4) + 869.7413408594535*pow(beta3,5)*pow(yb,4) + 
+       296.98484809834997*pow(beta2,2)*pow(beta3,5)*pow(yb,4) + 360.62445840513925*pow(beta2,4)*pow(beta3,5)*pow(yb,4) + 
+       147.0782104868019*beta3*g12*pow(yt,2) + 147.0782104868019*pow(beta2,2)*beta3*g12*pow(yt,2) + 
+       36.76955262170048*pow(beta2,4)*beta3*g12*pow(yt,2) - 73.53910524340095*pow(beta3,3)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,2)*pow(beta3,3)*g12*pow(yt,2) - 
+       18.38477631085024*pow(beta2,4)*pow(beta3,3)*g12*pow(yt,2) - 73.53910524340095*pow(beta3,5)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,2)*pow(beta3,5)*g12*pow(yt,2) - 
+       18.38477631085024*pow(beta2,4)*pow(beta3,5)*g12*pow(yt,2) + 509.11688245431424*beta3*g22*pow(yt,2) + 
+       509.11688245431424*pow(beta2,2)*beta3*g22*pow(yt,2) + 127.27922061357856*pow(beta2,4)*beta3*g22*pow(yt,2) - 
+       254.55844122715712*pow(beta3,3)*g22*pow(yt,2) - 254.55844122715712*pow(beta2,2)*pow(beta3,3)*g22*pow(yt,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,3)*g22*pow(yt,2) - 254.55844122715712*pow(beta3,5)*g22*pow(yt,2) - 
+       254.55844122715712*pow(beta2,2)*pow(beta3,5)*g22*pow(yt,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*g22*pow(yt,2) + 905.0966799187809*beta3*g32*pow(yt,2) + 
+       905.0966799187809*pow(beta2,2)*beta3*g32*pow(yt,2) + 226.27416997969522*pow(beta2,4)*beta3*g32*pow(yt,2) - 
+       452.54833995939043*pow(beta3,3)*g32*pow(yt,2) - 452.54833995939043*pow(beta2,2)*pow(beta3,3)*g32*pow(yt,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,3)*g32*pow(yt,2) - 452.54833995939043*pow(beta3,5)*g32*pow(yt,2) - 
+       452.54833995939043*pow(beta2,2)*pow(beta3,5)*g32*pow(yt,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,5)*g32*pow(yt,2) - 424.26406871192853*beta3*pow(yb,2)*pow(yt,2) - 
+       169.7056274847714*pow(beta2,2)*beta3*pow(yb,2)*pow(yt,2) - 
+       169.7056274847714*pow(beta2,4)*beta3*pow(yb,2)*pow(yt,2) + 212.13203435596427*pow(beta3,3)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,4)*pow(beta3,3)*pow(yb,2)*pow(yt,2) + 
+       212.13203435596427*pow(beta3,5)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,2)*pow(beta3,5)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,4)*pow(beta3,5)*pow(yb,2)*pow(yt,2) - 1039.4469683442248*beta3*pow(yt,4) - 
+       466.6904755831214*pow(beta2,2)*beta3*pow(yt,4) - 403.0508652763321*pow(beta2,4)*beta3*pow(yt,4) + 
+       169.7056274847714*pow(beta3,3)*pow(yt,4) + 169.7056274847714*pow(beta2,2)*pow(beta3,3)*pow(yt,4) + 
+       42.42640687119285*pow(beta2,4)*pow(beta3,3)*pow(yt,4) + 869.7413408594535*pow(beta3,5)*pow(yt,4) + 
+       296.98484809834997*pow(beta2,2)*pow(beta3,5)*pow(yt,4) + 360.62445840513925*pow(beta2,4)*pow(beta3,5)*pow(yt,4) - 
+       190.91883092036784*beta3*pow(yb,2)*pow(ytau,2) - 127.27922061357856*pow(beta2,2)*beta3*pow(yb,2)*pow(ytau,2) - 
+       63.63961030678928*pow(beta2,4)*beta3*pow(yb,2)*pow(ytau,2) + 63.63961030678928*pow(beta3,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta3,5)*pow(yb,2)*pow(ytau,2) + 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*pow(yb,2)*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));
+a6= f * sqr(lambda) * ((0.06666666666666667*betaeps*(68.58571279792898*pow(beta3,2)*g12*yb + 34.29285639896449*pow(beta2,2)*pow(beta3,2)*g12*yb + 
+       34.29285639896449*pow(beta3,4)*g12*yb + 17.146428199482244*pow(beta2,2)*pow(beta3,4)*g12*yb + 
+       440.90815370097204*pow(beta3,2)*g22*yb + 220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yb + 
+       220.45407685048602*pow(beta3,4)*g22*yb + 110.22703842524301*pow(beta2,2)*pow(beta3,4)*g22*yb + 
+       783.836717690617*pow(beta3,2)*g32*yb + 391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yb + 
+       391.9183588453085*pow(beta3,4)*g32*yb + 195.95917942265424*pow(beta2,2)*pow(beta3,4)*g32*yb - 
+       146.96938456699067*pow(yb,3) + 146.96938456699067*pow(beta2,2)*pow(yb,3) - 1432.951499528159*pow(beta3,2)*pow(yb,3) + 
+       330.68111527572904*pow(beta2,2)*pow(beta3,2)*pow(yb,3) - 734.8469228349534*pow(beta3,4)*pow(yb,3) - 
+       146.96938456699067*pow(beta2,2)*pow(beta3,4)*pow(yb,3) + 127.37346662472525*pow(beta3,2)*g12*yt + 
+       63.68673331236263*pow(beta2,2)*pow(beta3,2)*g12*yt + 63.68673331236263*pow(beta3,4)*g12*yt + 
+       31.843366656181313*pow(beta2,2)*pow(beta3,4)*g12*yt + 440.90815370097204*pow(beta3,2)*g22*yt + 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yt + 220.45407685048602*pow(beta3,4)*g22*yt + 
+       110.22703842524301*pow(beta2,2)*pow(beta3,4)*g22*yt + 783.836717690617*pow(beta3,2)*g32*yt + 
+       391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yt + 391.9183588453085*pow(beta3,4)*g32*yt + 
+       195.95917942265424*pow(beta2,2)*pow(beta3,4)*g32*yt + 146.96938456699067*pow(yb,2)*yt - 
+       146.96938456699067*pow(beta2,2)*pow(yb,2)*yt - 146.96938456699067*pow(beta3,2)*pow(yb,2)*yt - 
+       73.48469228349533*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*yt - 110.22703842524301*pow(beta3,4)*pow(yb,2)*yt + 
+       146.96938456699067*yb*pow(yt,2) - 146.96938456699067*pow(beta2,2)*yb*pow(yt,2) - 
+       146.96938456699067*pow(beta3,2)*yb*pow(yt,2) - 73.48469228349533*pow(beta2,2)*pow(beta3,2)*yb*pow(yt,2) - 
+       110.22703842524301*pow(beta3,4)*yb*pow(yt,2) - 146.96938456699067*pow(yt,3) + 
+       146.96938456699067*pow(beta2,2)*pow(yt,3) - 1432.951499528159*pow(beta3,2)*pow(yt,3) + 
+       330.68111527572904*pow(beta2,2)*pow(beta3,2)*pow(yt,3) - 734.8469228349534*pow(beta3,4)*pow(yt,3) - 
+       146.96938456699067*pow(beta2,2)*pow(beta3,4)*pow(yt,3) - 220.45407685048602*pow(beta3,2)*pow(yb,2)*ytau + 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau - 110.22703842524301*pow(beta3,2)*yb*pow(ytau,2) - 
+       110.22703842524301*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) - 110.22703842524301*pow(beta3,4)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a7= f * sqr(lambda) * ((0.2*(79.19595949289332*beta3*g12*pow(yb,2) + 79.19595949289332*pow(beta2,2)*beta3*g12*pow(yb,2) + 
+       19.79898987322333*pow(beta2,4)*beta3*g12*pow(yb,2) - 39.59797974644666*pow(beta3,3)*g12*pow(yb,2) - 
+       39.59797974644666*pow(beta2,2)*pow(beta3,3)*g12*pow(yb,2) - 
+       9.899494936611665*pow(beta2,4)*pow(beta3,3)*g12*pow(yb,2) - 39.59797974644666*pow(beta3,5)*g12*pow(yb,2) - 
+       39.59797974644666*pow(beta2,2)*pow(beta3,5)*g12*pow(yb,2) - 
+       9.899494936611665*pow(beta2,4)*pow(beta3,5)*g12*pow(yb,2) + 509.11688245431424*beta3*g22*pow(yb,2) + 
+       509.11688245431424*pow(beta2,2)*beta3*g22*pow(yb,2) + 127.27922061357856*pow(beta2,4)*beta3*g22*pow(yb,2) - 
+       254.55844122715712*pow(beta3,3)*g22*pow(yb,2) - 254.55844122715712*pow(beta2,2)*pow(beta3,3)*g22*pow(yb,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,3)*g22*pow(yb,2) - 254.55844122715712*pow(beta3,5)*g22*pow(yb,2) - 
+       254.55844122715712*pow(beta2,2)*pow(beta3,5)*g22*pow(yb,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*g22*pow(yb,2) + 905.0966799187809*beta3*g32*pow(yb,2) + 
+       905.0966799187809*pow(beta2,2)*beta3*g32*pow(yb,2) + 226.27416997969522*pow(beta2,4)*beta3*g32*pow(yb,2) - 
+       452.54833995939043*pow(beta3,3)*g32*pow(yb,2) - 452.54833995939043*pow(beta2,2)*pow(beta3,3)*g32*pow(yb,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,3)*g32*pow(yb,2) - 452.54833995939043*pow(beta3,5)*g32*pow(yb,2) - 
+       452.54833995939043*pow(beta2,2)*pow(beta3,5)*g32*pow(yb,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,5)*g32*pow(yb,2) - 1039.4469683442248*beta3*pow(yb,4) - 
+       466.6904755831214*pow(beta2,2)*beta3*pow(yb,4) - 403.0508652763321*pow(beta2,4)*beta3*pow(yb,4) + 
+       169.7056274847714*pow(beta3,3)*pow(yb,4) + 169.7056274847714*pow(beta2,2)*pow(beta3,3)*pow(yb,4) + 
+       42.42640687119285*pow(beta2,4)*pow(beta3,3)*pow(yb,4) + 869.7413408594535*pow(beta3,5)*pow(yb,4) + 
+       296.98484809834997*pow(beta2,2)*pow(beta3,5)*pow(yb,4) + 360.62445840513925*pow(beta2,4)*pow(beta3,5)*pow(yb,4) + 
+       147.0782104868019*beta3*g12*pow(yt,2) + 147.0782104868019*pow(beta2,2)*beta3*g12*pow(yt,2) + 
+       36.76955262170048*pow(beta2,4)*beta3*g12*pow(yt,2) - 73.53910524340095*pow(beta3,3)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,2)*pow(beta3,3)*g12*pow(yt,2) - 
+       18.38477631085024*pow(beta2,4)*pow(beta3,3)*g12*pow(yt,2) - 73.53910524340095*pow(beta3,5)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,2)*pow(beta3,5)*g12*pow(yt,2) - 
+       18.38477631085024*pow(beta2,4)*pow(beta3,5)*g12*pow(yt,2) + 509.11688245431424*beta3*g22*pow(yt,2) + 
+       509.11688245431424*pow(beta2,2)*beta3*g22*pow(yt,2) + 127.27922061357856*pow(beta2,4)*beta3*g22*pow(yt,2) - 
+       254.55844122715712*pow(beta3,3)*g22*pow(yt,2) - 254.55844122715712*pow(beta2,2)*pow(beta3,3)*g22*pow(yt,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,3)*g22*pow(yt,2) - 254.55844122715712*pow(beta3,5)*g22*pow(yt,2) - 
+       254.55844122715712*pow(beta2,2)*pow(beta3,5)*g22*pow(yt,2) - 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*g22*pow(yt,2) + 905.0966799187809*beta3*g32*pow(yt,2) + 
+       905.0966799187809*pow(beta2,2)*beta3*g32*pow(yt,2) + 226.27416997969522*pow(beta2,4)*beta3*g32*pow(yt,2) - 
+       452.54833995939043*pow(beta3,3)*g32*pow(yt,2) - 452.54833995939043*pow(beta2,2)*pow(beta3,3)*g32*pow(yt,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,3)*g32*pow(yt,2) - 452.54833995939043*pow(beta3,5)*g32*pow(yt,2) - 
+       452.54833995939043*pow(beta2,2)*pow(beta3,5)*g32*pow(yt,2) - 
+       113.13708498984761*pow(beta2,4)*pow(beta3,5)*g32*pow(yt,2) - 424.26406871192853*beta3*pow(yb,2)*pow(yt,2) - 
+       169.7056274847714*pow(beta2,2)*beta3*pow(yb,2)*pow(yt,2) - 
+       169.7056274847714*pow(beta2,4)*beta3*pow(yb,2)*pow(yt,2) + 212.13203435596427*pow(beta3,3)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,4)*pow(beta3,3)*pow(yb,2)*pow(yt,2) + 
+       212.13203435596427*pow(beta3,5)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,2)*pow(beta3,5)*pow(yb,2)*pow(yt,2) + 
+       84.8528137423857*pow(beta2,4)*pow(beta3,5)*pow(yb,2)*pow(yt,2) - 1039.4469683442248*beta3*pow(yt,4) - 
+       466.6904755831214*pow(beta2,2)*beta3*pow(yt,4) - 403.0508652763321*pow(beta2,4)*beta3*pow(yt,4) + 
+       169.7056274847714*pow(beta3,3)*pow(yt,4) + 169.7056274847714*pow(beta2,2)*pow(beta3,3)*pow(yt,4) + 
+       42.42640687119285*pow(beta2,4)*pow(beta3,3)*pow(yt,4) + 869.7413408594535*pow(beta3,5)*pow(yt,4) + 
+       296.98484809834997*pow(beta2,2)*pow(beta3,5)*pow(yt,4) + 360.62445840513925*pow(beta2,4)*pow(beta3,5)*pow(yt,4) - 
+       190.91883092036784*beta3*pow(yb,2)*pow(ytau,2) - 127.27922061357856*pow(beta2,2)*beta3*pow(yb,2)*pow(ytau,2) - 
+       63.63961030678928*pow(beta2,4)*beta3*pow(yb,2)*pow(ytau,2) + 63.63961030678928*pow(beta3,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta3,5)*pow(yb,2)*pow(ytau,2) + 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*pow(yb,2)*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));
+a8= f * sqr(lambda) * ((0.13333333333333333*(-56.*g12*pow(yb,2) - 56.*pow(beta2,2)*g12*pow(yb,2) - 14.*pow(beta2,4)*g12*pow(yb,2) + 
+       84.*pow(beta3,2)*g12*pow(yb,2) + 84.*pow(beta2,2)*pow(beta3,2)*g12*pow(yb,2) + 
+       21.*pow(beta2,4)*pow(beta3,2)*g12*pow(yb,2) - 28.*pow(beta3,6)*g12*pow(yb,2) - 
+       28.*pow(beta2,2)*pow(beta3,6)*g12*pow(yb,2) - 7.*pow(beta2,4)*pow(beta3,6)*g12*pow(yb,2) - 360.*g22*pow(yb,2) - 
+       360.*pow(beta2,2)*g22*pow(yb,2) - 90.*pow(beta2,4)*g22*pow(yb,2) + 540.*pow(beta3,2)*g22*pow(yb,2) + 
+       540.*pow(beta2,2)*pow(beta3,2)*g22*pow(yb,2) + 135.*pow(beta2,4)*pow(beta3,2)*g22*pow(yb,2) - 
+       180.*pow(beta3,6)*g22*pow(yb,2) - 180.*pow(beta2,2)*pow(beta3,6)*g22*pow(yb,2) - 
+       45.*pow(beta2,4)*pow(beta3,6)*g22*pow(yb,2) - 640.*g32*pow(yb,2) - 640.*pow(beta2,2)*g32*pow(yb,2) - 
+       160.*pow(beta2,4)*g32*pow(yb,2) + 960.*pow(beta3,2)*g32*pow(yb,2) + 
+       960.*pow(beta2,2)*pow(beta3,2)*g32*pow(yb,2) + 240.*pow(beta2,4)*pow(beta3,2)*g32*pow(yb,2) - 
+       320.*pow(beta3,6)*g32*pow(yb,2) - 320.*pow(beta2,2)*pow(beta3,6)*g32*pow(yb,2) - 
+       80.*pow(beta2,4)*pow(beta3,6)*g32*pow(yb,2) + 585.*pow(yb,4) + 630.*pow(beta2,2)*pow(yb,4) + 
+       135.*pow(beta2,4)*pow(yb,4) - 1350.*pow(beta3,2)*pow(yb,4) + 540.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) - 
+       810.*pow(beta2,4)*pow(beta3,2)*pow(yb,4) - 675.*pow(beta3,4)*pow(yb,4) + 
+       270.*pow(beta2,2)*pow(beta3,4)*pow(yb,4) - 405.*pow(beta2,4)*pow(beta3,4)*pow(yb,4) + 
+       630.*pow(beta3,6)*pow(yb,4) + 180.*pow(beta2,2)*pow(beta3,6)*pow(yb,4) + 
+       270.*pow(beta2,4)*pow(beta3,6)*pow(yb,4) - 104.*g12*pow(yt,2) - 104.*pow(beta2,2)*g12*pow(yt,2) - 
+       26.*pow(beta2,4)*g12*pow(yt,2) + 156.*pow(beta3,2)*g12*pow(yt,2) + 156.*pow(beta2,2)*pow(beta3,2)*g12*pow(yt,2) + 
+       39.*pow(beta2,4)*pow(beta3,2)*g12*pow(yt,2) - 52.*pow(beta3,6)*g12*pow(yt,2) - 
+       52.*pow(beta2,2)*pow(beta3,6)*g12*pow(yt,2) - 13.*pow(beta2,4)*pow(beta3,6)*g12*pow(yt,2) - 360.*g22*pow(yt,2) - 
+       360.*pow(beta2,2)*g22*pow(yt,2) - 90.*pow(beta2,4)*g22*pow(yt,2) + 540.*pow(beta3,2)*g22*pow(yt,2) + 
+       540.*pow(beta2,2)*pow(beta3,2)*g22*pow(yt,2) + 135.*pow(beta2,4)*pow(beta3,2)*g22*pow(yt,2) - 
+       180.*pow(beta3,6)*g22*pow(yt,2) - 180.*pow(beta2,2)*pow(beta3,6)*g22*pow(yt,2) - 
+       45.*pow(beta2,4)*pow(beta3,6)*g22*pow(yt,2) - 640.*g32*pow(yt,2) - 640.*pow(beta2,2)*g32*pow(yt,2) - 
+       160.*pow(beta2,4)*g32*pow(yt,2) + 960.*pow(beta3,2)*g32*pow(yt,2) + 
+       960.*pow(beta2,2)*pow(beta3,2)*g32*pow(yt,2) + 240.*pow(beta2,4)*pow(beta3,2)*g32*pow(yt,2) - 
+       320.*pow(beta3,6)*g32*pow(yt,2) - 320.*pow(beta2,2)*pow(beta3,6)*g32*pow(yt,2) - 
+       80.*pow(beta2,4)*pow(beta3,6)*g32*pow(yt,2) + 300.*pow(yb,2)*pow(yt,2) + 
+       120.*pow(beta2,2)*pow(yb,2)*pow(yt,2) + 120.*pow(beta2,4)*pow(yb,2)*pow(yt,2) - 
+       450.*pow(beta3,2)*pow(yb,2)*pow(yt,2) - 180.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(yt,2) - 
+       180.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 150.*pow(beta3,6)*pow(yb,2)*pow(yt,2) + 
+       60.*pow(beta2,2)*pow(beta3,6)*pow(yb,2)*pow(yt,2) + 60.*pow(beta2,4)*pow(beta3,6)*pow(yb,2)*pow(yt,2) + 
+       585.*pow(yt,4) + 630.*pow(beta2,2)*pow(yt,4) + 135.*pow(beta2,4)*pow(yt,4) - 1350.*pow(beta3,2)*pow(yt,4) + 
+       540.*pow(beta2,2)*pow(beta3,2)*pow(yt,4) - 810.*pow(beta2,4)*pow(beta3,2)*pow(yt,4) - 
+       675.*pow(beta3,4)*pow(yt,4) + 270.*pow(beta2,2)*pow(beta3,4)*pow(yt,4) - 
+       405.*pow(beta2,4)*pow(beta3,4)*pow(yt,4) + 630.*pow(beta3,6)*pow(yt,4) + 
+       180.*pow(beta2,2)*pow(beta3,6)*pow(yt,4) + 270.*pow(beta2,4)*pow(beta3,6)*pow(yt,4) + 
+       165.*pow(yb,2)*pow(ytau,2) + 30.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 75.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) - 
+       225.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 90.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       90.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 45.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       90.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) - 45.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       105.*pow(beta3,6)*pow(yb,2)*pow(ytau,2) - 30.*pow(beta2,2)*pow(beta3,6)*pow(yb,2)*pow(ytau,2) + 
+       60.*pow(beta2,4)*pow(beta3,6)*pow(yb,2)*pow(ytau,2)))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));
 
+  
+  setSoftMassElement(mQl,1,1, mqlsq  + a0);
+  setSoftMassElement(mQl,1,2, a1);
+  setSoftMassElement(mQl,1,3, a2);
+  setSoftMassElement(mQl,2,1, a3);
+  setSoftMassElement(mQl,2,2, mqlsq  + a4);
+  setSoftMassElement(mQl,2,3, a5);
+  setSoftMassElement(mQl,3,1, a6);
+  setSoftMassElement(mQl,3,2, a7);
+  setSoftMassElement(mQl,3,3, mqlsq  + a8);
+  
+  
+  //Ur
+a0= f * sqr(lambda) * ((0.4*(-104.*g12*pow(yt,2) - 52.*pow(beta2,2)*g12*pow(yt,2) - 104.*pow(beta3,2)*g12*pow(yt,2) - 
+       52.*pow(beta2,2)*pow(beta3,2)*g12*pow(yt,2) - 26.*pow(beta3,4)*g12*pow(yt,2) - 
+       13.*pow(beta2,2)*pow(beta3,4)*g12*pow(yt,2) - 360.*g22*pow(yt,2) - 180.*pow(beta2,2)*g22*pow(yt,2) - 
+       360.*pow(beta3,2)*g22*pow(yt,2) - 180.*pow(beta2,2)*pow(beta3,2)*g22*pow(yt,2) - 90.*pow(beta3,4)*g22*pow(yt,2) - 
+       45.*pow(beta2,2)*pow(beta3,4)*g22*pow(yt,2) - 640.*g32*pow(yt,2) - 320.*pow(beta2,2)*g32*pow(yt,2) - 
+       640.*pow(beta3,2)*g32*pow(yt,2) - 320.*pow(beta2,2)*pow(beta3,2)*g32*pow(yt,2) - 
+       160.*pow(beta3,4)*g32*pow(yt,2) - 80.*pow(beta2,2)*pow(beta3,4)*g32*pow(yt,2) + 180.*pow(yb,2)*pow(yt,2) + 
+       90.*pow(beta2,2)*pow(yb,2)*pow(yt,2) + 90.*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       45.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 945.*pow(yt,4) + 225.*pow(beta2,2)*pow(yt,4) + 
+       630.*pow(beta3,2)*pow(yt,4) + 270.*pow(beta2,2)*pow(beta3,2)*pow(yt,4) + 315.*pow(beta3,4)*pow(yt,4) + 
+       45.*pow(beta2,2)*pow(beta3,4)*pow(yt,4)))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a1= f * sqr(lambda) * ((-0.26666666666666666*betaeps*(-90.06664199358161*beta2*g12*yt - 45.033320996790806*pow(beta2,3)*g12*yt - 
+       45.033320996790806*beta2*pow(beta3,2)*g12*yt - 22.516660498395403*pow(beta2,3)*pow(beta3,2)*g12*yt - 
+       311.7691453623979*beta2*g22*yt - 155.88457268119896*pow(beta2,3)*g22*yt - 155.88457268119896*beta2*pow(beta3,2)*g22*yt - 
+       77.94228634059948*pow(beta2,3)*pow(beta3,2)*g22*yt - 554.2562584220407*beta2*g32*yt - 
+       277.12812921102034*pow(beta2,3)*g32*yt - 277.12812921102034*beta2*pow(beta3,2)*g32*yt - 
+       138.56406460551017*pow(beta2,3)*pow(beta3,2)*g32*yt + 155.88457268119896*beta2*pow(yb,2)*yt + 
+       77.94228634059948*pow(beta2,3)*pow(yb,2)*yt + 1169.134295108992*beta2*pow(yt,3) + 
+       623.5382907247958*pow(beta2,3)*pow(yt,3) - 77.94228634059948*beta2*pow(beta3,2)*pow(yt,3) + 
+       155.88457268119896*pow(beta2,3)*pow(beta3,2)*pow(yt,3)))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a2= f * sqr(lambda) * ((-0.13333333333333333*betaeps*(-127.37346662472525*pow(beta2,2)*g12*yt - 63.68673331236263*pow(beta2,4)*g12*yt - 
+       63.68673331236263*pow(beta2,2)*pow(beta3,2)*g12*yt - 31.843366656181313*pow(beta2,4)*pow(beta3,2)*g12*yt - 
+       440.90815370097204*pow(beta2,2)*g22*yt - 220.45407685048602*pow(beta2,4)*g22*yt - 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yt - 110.22703842524301*pow(beta2,4)*pow(beta3,2)*g22*yt - 
+       783.836717690617*pow(beta2,2)*g32*yt - 391.9183588453085*pow(beta2,4)*g32*yt - 
+       391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yt - 195.95917942265424*pow(beta2,4)*pow(beta3,2)*g32*yt + 
+       220.45407685048602*pow(beta2,2)*pow(yb,2)*yt + 110.22703842524301*pow(beta2,4)*pow(yb,2)*yt + 
+       1359.4668072446636*pow(beta2,2)*pow(yt,3) + 734.8469228349534*pow(beta2,4)*pow(yt,3) - 
+       257.1964229922337*pow(beta2,2)*pow(beta3,2)*pow(yt,3) + 146.96938456699067*pow(beta2,4)*pow(beta3,2)*pow(yt,3)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a3= f * sqr(lambda) * ((-0.26666666666666666*betaeps*(-90.06664199358161*beta2*g12*yt - 45.033320996790806*pow(beta2,3)*g12*yt - 
+       45.033320996790806*beta2*pow(beta3,2)*g12*yt - 22.516660498395403*pow(beta2,3)*pow(beta3,2)*g12*yt - 
+       311.7691453623979*beta2*g22*yt - 155.88457268119896*pow(beta2,3)*g22*yt - 155.88457268119896*beta2*pow(beta3,2)*g22*yt - 
+       77.94228634059948*pow(beta2,3)*pow(beta3,2)*g22*yt - 554.2562584220407*beta2*g32*yt - 
+       277.12812921102034*pow(beta2,3)*g32*yt - 277.12812921102034*beta2*pow(beta3,2)*g32*yt - 
+       138.56406460551017*pow(beta2,3)*pow(beta3,2)*g32*yt + 155.88457268119896*beta2*pow(yb,2)*yt + 
+       77.94228634059948*pow(beta2,3)*pow(yb,2)*yt + 1169.134295108992*beta2*pow(yt,3) + 
+       623.5382907247958*pow(beta2,3)*pow(yt,3) - 77.94228634059948*beta2*pow(beta3,2)*pow(yt,3) + 
+       155.88457268119896*pow(beta2,3)*pow(beta3,2)*pow(yt,3)))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a4= f * sqr(lambda) * ((1.2*(-104.*pow(beta2,2)*g12*pow(yt,2) - 52.*pow(beta2,4)*g12*pow(yt,2) - 104.*pow(beta2,2)*pow(beta3,2)*g12*pow(yt,2) - 
+       52.*pow(beta2,4)*pow(beta3,2)*g12*pow(yt,2) - 26.*pow(beta2,2)*pow(beta3,4)*g12*pow(yt,2) - 
+       13.*pow(beta2,4)*pow(beta3,4)*g12*pow(yt,2) - 360.*pow(beta2,2)*g22*pow(yt,2) - 180.*pow(beta2,4)*g22*pow(yt,2) - 
+       360.*pow(beta2,2)*pow(beta3,2)*g22*pow(yt,2) - 180.*pow(beta2,4)*pow(beta3,2)*g22*pow(yt,2) - 
+       90.*pow(beta2,2)*pow(beta3,4)*g22*pow(yt,2) - 45.*pow(beta2,4)*pow(beta3,4)*g22*pow(yt,2) - 
+       640.*pow(beta2,2)*g32*pow(yt,2) - 320.*pow(beta2,4)*g32*pow(yt,2) - 
+       640.*pow(beta2,2)*pow(beta3,2)*g32*pow(yt,2) - 320.*pow(beta2,4)*pow(beta3,2)*g32*pow(yt,2) - 
+       160.*pow(beta2,2)*pow(beta3,4)*g32*pow(yt,2) - 80.*pow(beta2,4)*pow(beta3,4)*g32*pow(yt,2) + 
+       180.*pow(beta2,2)*pow(yb,2)*pow(yt,2) + 90.*pow(beta2,4)*pow(yb,2)*pow(yt,2) + 
+       90.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 45.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       615.*pow(beta2,2)*pow(yt,4) + 555.*pow(beta2,4)*pow(yt,4) + 570.*pow(beta2,2)*pow(beta3,2)*pow(yt,4) + 
+       330.*pow(beta2,4)*pow(beta3,2)*pow(yt,4) + 165.*pow(beta2,2)*pow(beta3,4)*pow(yt,4) + 
+       195.*pow(beta2,4)*pow(beta3,4)*pow(yt,4)))/(pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));
+a5= f * sqr(lambda) * ((8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*(13.*beta2*pow(yb,2) + 2.*pow(beta2,3)*pow(yb,2) + 
+        10.*beta2*pow(beta3,2)*pow(yb,2) - 4.*pow(beta2,3)*pow(beta3,2)*pow(yb,2) + 4.*beta2*pow(beta3,4)*pow(yb,2) + 
+        2.*pow(beta2,3)*pow(beta3,4)*pow(yb,2))*pow(yt,2))/(pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*(7.*beta2*pow(yb,2) + 8.*pow(beta2,3)*pow(yb,2) - 
+        2.*beta2*pow(beta3,2)*pow(yb,2) + 8.*pow(beta2,3)*pow(beta3,2)*pow(yb,2) + 4.*beta2*pow(beta3,4)*pow(yb,2) + 
+        2.*pow(beta2,3)*pow(beta3,4)*pow(yb,2))*pow(yt,2))/(pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (33.941125496954285*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*pow(yt,4))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*(-1. + pow(beta2,2))*(beta2 + 8.*pow(beta2,3) + 10.*beta2*pow(beta3,2) + 
+        8.*pow(beta2,3)*pow(beta3,2) - 2.*beta2*pow(beta3,4) + 2.*pow(beta2,3)*pow(beta3,4))*pow(yt,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*(13.*beta2 + 2.*pow(beta2,3) + 10.*beta2*pow(beta3,2) - 
+        4.*pow(beta2,3)*pow(beta3,2) + 4.*beta2*pow(beta3,4) + 2.*pow(beta2,3)*pow(beta3,4))*pow(yt,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (12.727922061357857*(-1. + pow(beta2,2))*(7.*beta2 + 8.*pow(beta2,3) - 2.*beta2*pow(beta3,2) + 
+        8.*pow(beta2,3)*pow(beta3,2) + 4.*beta2*pow(beta3,4) + 2.*pow(beta2,3)*pow(beta3,4))*pow(yt,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) - 
+   (0.4*(13.*g12 + 45.*g22 + 80.*g32 - 45.*pow(yt,2))*
+      (-1.4142135623730951*beta2*pow(yt,2) + 1.4142135623730951*pow(beta2,3)*pow(yt,2)))/pow(2. + pow(beta2,2),2) + 
+   (25.455844122715714*beta2*pow(pow(yt,2) - 1.*pow(beta2,2)*pow(yt,2) - 1.*pow(beta3,2)*pow(yt,2) + 
+        pow(beta2,2)*pow(beta3,2)*pow(yt,2),2))/(pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));
+a6= f * sqr(lambda) * ((-0.13333333333333333*betaeps*(-127.37346662472525*pow(beta2,2)*g12*yt - 63.68673331236263*pow(beta2,4)*g12*yt - 
+       63.68673331236263*pow(beta2,2)*pow(beta3,2)*g12*yt - 31.843366656181313*pow(beta2,4)*pow(beta3,2)*g12*yt - 
+       440.90815370097204*pow(beta2,2)*g22*yt - 220.45407685048602*pow(beta2,4)*g22*yt - 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yt - 110.22703842524301*pow(beta2,4)*pow(beta3,2)*g22*yt - 
+       783.836717690617*pow(beta2,2)*g32*yt - 391.9183588453085*pow(beta2,4)*g32*yt - 
+       391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yt - 195.95917942265424*pow(beta2,4)*pow(beta3,2)*g32*yt + 
+       220.45407685048602*pow(beta2,2)*pow(yb,2)*yt + 110.22703842524301*pow(beta2,4)*pow(yb,2)*yt + 
+       1359.4668072446636*pow(beta2,2)*pow(yt,3) + 734.8469228349534*pow(beta2,4)*pow(yt,3) - 
+       257.1964229922337*pow(beta2,2)*pow(beta3,2)*pow(yt,3) + 146.96938456699067*pow(beta2,4)*pow(beta3,2)*pow(yt,3)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a7= f * sqr(lambda) * ((0.4*(147.0782104868019*beta2*g12*pow(yt,2) - 73.53910524340095*pow(beta2,3)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,5)*g12*pow(yt,2) + 147.0782104868019*beta2*pow(beta3,2)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,3)*pow(beta3,2)*g12*pow(yt,2) - 
+       73.53910524340095*pow(beta2,5)*pow(beta3,2)*g12*pow(yt,2) + 36.76955262170048*beta2*pow(beta3,4)*g12*pow(yt,2) - 
+       18.38477631085024*pow(beta2,3)*pow(beta3,4)*g12*pow(yt,2) - 
+       18.38477631085024*pow(beta2,5)*pow(beta3,4)*g12*pow(yt,2) + 509.11688245431424*beta2*g22*pow(yt,2) - 
+       254.55844122715712*pow(beta2,3)*g22*pow(yt,2) - 254.55844122715712*pow(beta2,5)*g22*pow(yt,2) + 
+       509.11688245431424*beta2*pow(beta3,2)*g22*pow(yt,2) - 254.55844122715712*pow(beta2,3)*pow(beta3,2)*g22*pow(yt,2) - 
+       254.55844122715712*pow(beta2,5)*pow(beta3,2)*g22*pow(yt,2) + 127.27922061357856*beta2*pow(beta3,4)*g22*pow(yt,2) - 
+       63.63961030678928*pow(beta2,3)*pow(beta3,4)*g22*pow(yt,2) - 
+       63.63961030678928*pow(beta2,5)*pow(beta3,4)*g22*pow(yt,2) + 905.0966799187809*beta2*g32*pow(yt,2) - 
+       452.54833995939043*pow(beta2,3)*g32*pow(yt,2) - 452.54833995939043*pow(beta2,5)*g32*pow(yt,2) + 
+       905.0966799187809*beta2*pow(beta3,2)*g32*pow(yt,2) - 452.54833995939043*pow(beta2,3)*pow(beta3,2)*g32*pow(yt,2) - 
+       452.54833995939043*pow(beta2,5)*pow(beta3,2)*g32*pow(yt,2) + 226.27416997969522*beta2*pow(beta3,4)*g32*pow(yt,2) - 
+       113.13708498984761*pow(beta2,3)*pow(beta3,4)*g32*pow(yt,2) - 
+       113.13708498984761*pow(beta2,5)*pow(beta3,4)*g32*pow(yt,2) - 254.55844122715712*beta2*pow(yb,2)*pow(yt,2) + 
+       127.27922061357856*pow(beta2,3)*pow(yb,2)*pow(yt,2) + 127.27922061357856*pow(beta2,5)*pow(yb,2)*pow(yt,2) - 
+       127.27922061357856*beta2*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       63.63961030678928*pow(beta2,3)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       63.63961030678928*pow(beta2,5)*pow(beta3,4)*pow(yb,2)*pow(yt,2) - 997.0205614730321*beta2*pow(yt,4) + 
+       148.49242404917499*pow(beta2,3)*pow(yt,4) + 848.5281374238571*pow(beta2,5)*pow(yt,4) - 
+       551.5432893255071*beta2*pow(beta3,2)*pow(yt,4) + 212.13203435596427*pow(beta2,3)*pow(beta3,2)*pow(yt,4) + 
+       339.4112549695428*pow(beta2,5)*pow(beta3,2)*pow(yt,4) - 360.62445840513925*beta2*pow(beta3,4)*pow(yt,4) + 
+       21.213203435596427*pow(beta2,3)*pow(beta3,4)*pow(yt,4) + 339.4112549695428*pow(beta2,5)*pow(beta3,4)*pow(yt,4)))/
+   (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));
+a8= f * sqr(lambda) * ((0.26666666666666666*(-104.*g12*pow(yt,2) + 156.*pow(beta2,2)*g12*pow(yt,2) - 52.*pow(beta2,6)*g12*pow(yt,2) - 
+       104.*pow(beta3,2)*g12*pow(yt,2) + 156.*pow(beta2,2)*pow(beta3,2)*g12*pow(yt,2) - 
+       52.*pow(beta2,6)*pow(beta3,2)*g12*pow(yt,2) - 26.*pow(beta3,4)*g12*pow(yt,2) + 
+       39.*pow(beta2,2)*pow(beta3,4)*g12*pow(yt,2) - 13.*pow(beta2,6)*pow(beta3,4)*g12*pow(yt,2) - 360.*g22*pow(yt,2) + 
+       540.*pow(beta2,2)*g22*pow(yt,2) - 180.*pow(beta2,6)*g22*pow(yt,2) - 360.*pow(beta3,2)*g22*pow(yt,2) + 
+       540.*pow(beta2,2)*pow(beta3,2)*g22*pow(yt,2) - 180.*pow(beta2,6)*pow(beta3,2)*g22*pow(yt,2) - 
+       90.*pow(beta3,4)*g22*pow(yt,2) + 135.*pow(beta2,2)*pow(beta3,4)*g22*pow(yt,2) - 
+       45.*pow(beta2,6)*pow(beta3,4)*g22*pow(yt,2) - 640.*g32*pow(yt,2) + 960.*pow(beta2,2)*g32*pow(yt,2) - 
+       320.*pow(beta2,6)*g32*pow(yt,2) - 640.*pow(beta3,2)*g32*pow(yt,2) + 
+       960.*pow(beta2,2)*pow(beta3,2)*g32*pow(yt,2) - 320.*pow(beta2,6)*pow(beta3,2)*g32*pow(yt,2) - 
+       160.*pow(beta3,4)*g32*pow(yt,2) + 240.*pow(beta2,2)*pow(beta3,4)*g32*pow(yt,2) - 
+       80.*pow(beta2,6)*pow(beta3,4)*g32*pow(yt,2) + 60.*pow(yb,2)*pow(yt,2) - 450.*pow(beta2,2)*pow(yb,2)*pow(yt,2) - 
+       90.*pow(beta2,4)*pow(yb,2)*pow(yt,2) + 75.*pow(beta2,6)*pow(yb,2)*pow(yt,2) + 
+       240.*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 360.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 
+       180.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(yt,2) + 30.*pow(beta2,6)*pow(beta3,2)*pow(yb,2)*pow(yt,2) - 
+       30.*pow(beta3,4)*pow(yb,2)*pow(yt,2) - 315.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(yt,2) - 
+       90.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 30.*pow(beta2,6)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       675.*pow(yt,4) - 1125.*pow(beta2,2)*pow(yt,4) - 585.*pow(beta2,4)*pow(yt,4) + 630.*pow(beta2,6)*pow(yt,4) + 
+       450.*pow(beta3,2)*pow(yt,4) + 90.*pow(beta2,2)*pow(beta3,2)*pow(yt,4) + 
+       90.*pow(beta2,4)*pow(beta3,2)*pow(yt,4) + 180.*pow(beta2,6)*pow(beta3,2)*pow(yt,4) + 
+       225.*pow(beta3,4)*pow(yt,4) - 585.*pow(beta2,2)*pow(beta3,4)*pow(yt,4) - 
+       315.*pow(beta2,4)*pow(beta3,4)*pow(yt,4) + 270.*pow(beta2,6)*pow(beta3,4)*pow(yt,4)))/
+   (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));  
+/* 
+cout <<"UR"<<endl;
+cout <<"a0="<<a0 <<endl;
+cout <<"a1="<<a1 <<endl;
+cout <<"a2="<<a2 <<endl;
+cout <<"a3="<<a3 <<endl;
+cout <<"a4="<<a4 <<endl;
+cout <<"a5="<<a5 <<endl;
+cout <<"a6="<<a6 <<endl;
+cout <<"a7="<<a7 <<endl;
+cout <<"a8="<<a8 <<endl;
+ */
+
+  setSoftMassElement(mUr,1,1, mursq + a0);
+  setSoftMassElement(mUr,1,2, a1);
+  setSoftMassElement(mUr,1,3, a2);
+  setSoftMassElement(mUr,2,1, a3);
+  setSoftMassElement(mUr,2,2, mursq + a4);
+  setSoftMassElement(mUr,2,3, a5);
+  setSoftMassElement(mUr,3,1, a6);
+  setSoftMassElement(mUr,3,2, a7);
+  setSoftMassElement(mUr,3,3, mursq + a8);
+  
+  //Dr
+a0= f * sqr(lambda) * ((0.4*(-56.*g12*pow(yb,2) - 28.*pow(beta2,2)*g12*pow(yb,2) - 
+       56.*pow(beta3,2)*g12*pow(yb,2) - 
+       28.*pow(beta2,2)*pow(beta3,2)*g12*pow(yb,2) - 
+       14.*pow(beta3,4)*g12*pow(yb,2) - 
+       7.*pow(beta2,2)*pow(beta3,4)*g12*pow(yb,2) - 360.*g22*pow(yb,2) - 
+       180.*pow(beta2,2)*g22*pow(yb,2) - 360.*pow(beta3,2)*g22*pow(yb,2) - 
+       180.*pow(beta2,2)*pow(beta3,2)*g22*pow(yb,2) - 
+       90.*pow(beta3,4)*g22*pow(yb,2) - 
+       45.*pow(beta2,2)*pow(beta3,4)*g22*pow(yb,2) - 640.*g32*pow(yb,2) - 
+       320.*pow(beta2,2)*g32*pow(yb,2) - 640.*pow(beta3,2)*g32*pow(yb,2) - 
+       320.*pow(beta2,2)*pow(beta3,2)*g32*pow(yb,2) - 
+       160.*pow(beta3,4)*g32*pow(yb,2) - 
+       80.*pow(beta2,2)*pow(beta3,4)*g32*pow(yb,2) + 945.*pow(yb,4) + 
+       225.*pow(beta2,2)*pow(yb,4) + 630.*pow(beta3,2)*pow(yb,4) + 
+       270.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) + 
+       315.*pow(beta3,4)*pow(yb,4) + 45.*pow(beta2,2)*pow(beta3,4)*pow(yb,4) + 
+       180.*pow(yb,2)*pow(yt,2) + 90.*pow(beta2,2)*pow(yb,2)*pow(yt,2) + 
+       90.*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       45.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       375.*pow(yb,2)*pow(ytau,2) + 165.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       330.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       210.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       105.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a1= f * sqr(lambda) * ((-0.26666666666666666*betaeps*(-48.49742261192856*beta2*g12*yb - 
+       24.24871130596428*pow(beta2,3)*g12*yb - 
+       24.24871130596428*beta2*pow(beta3,2)*g12*yb - 
+       12.12435565298214*pow(beta2,3)*pow(beta3,2)*g12*yb - 
+       311.7691453623979*beta2*g22*yb - 155.88457268119896*pow(beta2,3)*g22*yb - 
+       155.88457268119896*beta2*pow(beta3,2)*g22*yb - 
+       77.94228634059948*pow(beta2,3)*pow(beta3,2)*g22*yb - 
+       554.2562584220407*beta2*g32*yb - 277.12812921102034*pow(beta2,3)*g32*yb - 
+       277.12812921102034*beta2*pow(beta3,2)*g32*yb - 
+       138.56406460551017*pow(beta2,3)*pow(beta3,2)*g32*yb + 
+       1169.134295108992*beta2*pow(yb,3) + 
+       623.5382907247958*pow(beta2,3)*pow(yb,3) - 
+       77.94228634059948*beta2*pow(beta3,2)*pow(yb,3) + 
+       155.88457268119896*pow(beta2,3)*pow(beta3,2)*pow(yb,3) + 
+       155.88457268119896*beta2*yb*pow(yt,2) + 
+       77.94228634059948*pow(beta2,3)*yb*pow(yt,2) + 
+       467.6537180435968*beta2*pow(yb,2)*ytau - 
+       467.6537180435968*beta2*pow(beta3,2)*pow(yb,2)*ytau + 
+       285.78838324886476*beta2*yb*pow(ytau,2) + 
+       181.8653347947321*pow(beta2,3)*yb*pow(ytau,2) + 
+       181.8653347947321*beta2*pow(beta3,2)*yb*pow(ytau,2) + 
+       51.96152422706631*pow(beta2,3)*pow(beta3,2)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a2= f * sqr(lambda) * ((-0.13333333333333333*betaeps*(-68.58571279792898*pow(beta2,2)*g12*yb - 
+       34.29285639896449*pow(beta2,4)*g12*yb - 
+       34.29285639896449*pow(beta2,2)*pow(beta3,2)*g12*yb - 
+       17.146428199482244*pow(beta2,4)*pow(beta3,2)*g12*yb - 
+       440.90815370097204*pow(beta2,2)*g22*yb - 
+       220.45407685048602*pow(beta2,4)*g22*yb - 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yb - 
+       110.22703842524301*pow(beta2,4)*pow(beta3,2)*g22*yb - 
+       783.836717690617*pow(beta2,2)*g32*yb - 
+       391.9183588453085*pow(beta2,4)*g32*yb - 
+       391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yb - 
+       195.95917942265424*pow(beta2,4)*pow(beta3,2)*g32*yb + 
+       1359.4668072446636*pow(beta2,2)*pow(yb,3) + 
+       734.8469228349534*pow(beta2,4)*pow(yb,3) - 
+       257.1964229922337*pow(beta2,2)*pow(beta3,2)*pow(yb,3) + 
+       146.96938456699067*pow(beta2,4)*pow(beta3,2)*pow(yb,3) + 
+       220.45407685048602*pow(beta2,2)*yb*pow(yt,2) + 
+       110.22703842524301*pow(beta2,4)*yb*pow(yt,2) - 
+       293.93876913398134*pow(yb,2)*ytau + 
+       514.3928459844674*pow(beta2,2)*pow(yb,2)*ytau + 
+       293.93876913398134*pow(beta3,2)*pow(yb,2)*ytau - 
+       514.3928459844674*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau + 
+       404.16580755922433*pow(beta2,2)*yb*pow(ytau,2) + 
+       257.1964229922337*pow(beta2,4)*yb*pow(ytau,2) + 
+       257.1964229922337*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) + 
+       73.48469228349533*pow(beta2,4)*pow(beta3,2)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a3= f * sqr(lambda) * ((-0.26666666666666666*betaeps*(-48.49742261192856*beta2*g12*yb - 
+       24.24871130596428*pow(beta2,3)*g12*yb - 
+       24.24871130596428*beta2*pow(beta3,2)*g12*yb - 
+       12.12435565298214*pow(beta2,3)*pow(beta3,2)*g12*yb - 
+       311.7691453623979*beta2*g22*yb - 155.88457268119896*pow(beta2,3)*g22*yb - 
+       155.88457268119896*beta2*pow(beta3,2)*g22*yb - 
+       77.94228634059948*pow(beta2,3)*pow(beta3,2)*g22*yb - 
+       554.2562584220407*beta2*g32*yb - 277.12812921102034*pow(beta2,3)*g32*yb - 
+       277.12812921102034*beta2*pow(beta3,2)*g32*yb - 
+       138.56406460551017*pow(beta2,3)*pow(beta3,2)*g32*yb + 
+       1169.134295108992*beta2*pow(yb,3) + 
+       623.5382907247958*pow(beta2,3)*pow(yb,3) - 
+       77.94228634059948*beta2*pow(beta3,2)*pow(yb,3) + 
+       155.88457268119896*pow(beta2,3)*pow(beta3,2)*pow(yb,3) + 
+       155.88457268119896*beta2*yb*pow(yt,2) + 
+       77.94228634059948*pow(beta2,3)*yb*pow(yt,2) + 
+       467.6537180435968*beta2*pow(yb,2)*ytau - 
+       467.6537180435968*beta2*pow(beta3,2)*pow(yb,2)*ytau + 
+       285.78838324886476*beta2*yb*pow(ytau,2) + 
+       181.8653347947321*pow(beta2,3)*yb*pow(ytau,2) + 
+       181.8653347947321*beta2*pow(beta3,2)*yb*pow(ytau,2) + 
+       51.96152422706631*pow(beta2,3)*pow(beta3,2)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a4= f * sqr(lambda) * ((1.2*(-56.*pow(beta2,2)*g12*pow(yb,2) - 28.*pow(beta2,4)*g12*pow(yb,2) - 
+       56.*pow(beta2,2)*pow(beta3,2)*g12*pow(yb,2) - 
+       28.*pow(beta2,4)*pow(beta3,2)*g12*pow(yb,2) - 
+       14.*pow(beta2,2)*pow(beta3,4)*g12*pow(yb,2) - 
+       7.*pow(beta2,4)*pow(beta3,4)*g12*pow(yb,2) - 
+       360.*pow(beta2,2)*g22*pow(yb,2) - 180.*pow(beta2,4)*g22*pow(yb,2) - 
+       360.*pow(beta2,2)*pow(beta3,2)*g22*pow(yb,2) - 
+       180.*pow(beta2,4)*pow(beta3,2)*g22*pow(yb,2) - 
+       90.*pow(beta2,2)*pow(beta3,4)*g22*pow(yb,2) - 
+       45.*pow(beta2,4)*pow(beta3,4)*g22*pow(yb,2) - 
+       640.*pow(beta2,2)*g32*pow(yb,2) - 320.*pow(beta2,4)*g32*pow(yb,2) - 
+       640.*pow(beta2,2)*pow(beta3,2)*g32*pow(yb,2) - 
+       320.*pow(beta2,4)*pow(beta3,2)*g32*pow(yb,2) - 
+       160.*pow(beta2,2)*pow(beta3,4)*g32*pow(yb,2) - 
+       80.*pow(beta2,4)*pow(beta3,4)*g32*pow(yb,2) + 
+       615.*pow(beta2,2)*pow(yb,4) + 555.*pow(beta2,4)*pow(yb,4) + 
+       570.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) + 
+       330.*pow(beta2,4)*pow(beta3,2)*pow(yb,4) + 
+       165.*pow(beta2,2)*pow(beta3,4)*pow(yb,4) + 
+       195.*pow(beta2,4)*pow(beta3,4)*pow(yb,4) + 
+       180.*pow(beta2,2)*pow(yb,2)*pow(yt,2) + 
+       90.*pow(beta2,4)*pow(yb,2)*pow(yt,2) + 
+       90.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       45.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(yt,2) + 
+       345.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       195.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) + 
+       390.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       150.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       75.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       60.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));
+a5= f * sqr(lambda) * ((8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*
+      pow(yb,4))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*(-1. + pow(beta2,2))*
+      (beta2 + 8.*pow(beta2,3) + 10.*beta2*pow(beta3,2) + 
+        8.*pow(beta2,3)*pow(beta3,2) - 2.*beta2*pow(beta3,4) + 
+        2.*pow(beta2,3)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*
+      (13.*beta2 + 2.*pow(beta2,3) + 10.*beta2*pow(beta3,2) - 
+        4.*pow(beta2,3)*pow(beta3,2) + 4.*beta2*pow(beta3,4) + 
+        2.*pow(beta2,3)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (12.727922061357857*(-1. + pow(beta2,2))*
+      (7.*beta2 + 8.*pow(beta2,3) - 2.*beta2*pow(beta3,2) + 
+        8.*pow(beta2,3)*pow(beta3,2) + 4.*beta2*pow(beta3,4) + 
+        2.*pow(beta2,3)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*
+      pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*pow(yb,2)*
+      (13.*beta2*pow(yt,2) + 2.*pow(beta2,3)*pow(yt,2) + 
+        10.*beta2*pow(beta3,2)*pow(yt,2) - 
+        4.*pow(beta2,3)*pow(beta3,2)*pow(yt,2) + 
+        4.*beta2*pow(beta3,4)*pow(yt,2) + 
+        2.*pow(beta2,3)*pow(beta3,4)*pow(yt,2)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*pow(yb,2)*
+      (7.*beta2*pow(yt,2) + 8.*pow(beta2,3)*pow(yt,2) - 
+        2.*beta2*pow(beta3,2)*pow(yt,2) + 
+        8.*pow(beta2,3)*pow(beta3,2)*pow(yt,2) + 
+        4.*beta2*pow(beta3,4)*pow(yt,2) + 
+        2.*pow(beta2,3)*pow(beta3,4)*pow(yt,2)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*beta2*pow(1. - 1.*pow(beta2,2) - 1.*pow(beta3,2) + 
+        pow(beta2,2)*pow(beta3,2),2)*pow(yb,2)*(3.*pow(yb,2) + pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (0.4*(-1.4142135623730951*beta2*pow(yb,2) + 
+        1.4142135623730951*pow(beta2,3)*pow(yb,2))*
+      (-7.*g12 - 45.*g22 - 80.*g32 + 45.*pow(yb,2) + 45.*pow(ytau,2)))/
+    pow(2. + pow(beta2,2),2) + (8.485281374238571*beta2*
+      pow(-1. + pow(beta3,2),2)*pow(yb,2)*
+      (-3.*pow(yb,2) + 3.*pow(beta2,2)*pow(yb,2) - 1.*pow(ytau,2) + 
+        pow(beta2,2)*pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a6= f * sqr(lambda) * ((-0.13333333333333333*betaeps*(-68.58571279792898*pow(beta2,2)*g12*yb - 
+       34.29285639896449*pow(beta2,4)*g12*yb - 
+       34.29285639896449*pow(beta2,2)*pow(beta3,2)*g12*yb - 
+       17.146428199482244*pow(beta2,4)*pow(beta3,2)*g12*yb - 
+       440.90815370097204*pow(beta2,2)*g22*yb - 
+       220.45407685048602*pow(beta2,4)*g22*yb - 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*g22*yb - 
+       110.22703842524301*pow(beta2,4)*pow(beta3,2)*g22*yb - 
+       783.836717690617*pow(beta2,2)*g32*yb - 
+       391.9183588453085*pow(beta2,4)*g32*yb - 
+       391.9183588453085*pow(beta2,2)*pow(beta3,2)*g32*yb - 
+       195.95917942265424*pow(beta2,4)*pow(beta3,2)*g32*yb + 
+       1359.4668072446636*pow(beta2,2)*pow(yb,3) + 
+       734.8469228349534*pow(beta2,4)*pow(yb,3) - 
+       257.1964229922337*pow(beta2,2)*pow(beta3,2)*pow(yb,3) + 
+       146.96938456699067*pow(beta2,4)*pow(beta3,2)*pow(yb,3) + 
+       220.45407685048602*pow(beta2,2)*yb*pow(yt,2) + 
+       110.22703842524301*pow(beta2,4)*yb*pow(yt,2) - 
+       293.93876913398134*pow(yb,2)*ytau + 
+       514.3928459844674*pow(beta2,2)*pow(yb,2)*ytau + 
+       293.93876913398134*pow(beta3,2)*pow(yb,2)*ytau - 
+       514.3928459844674*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau + 
+       404.16580755922433*pow(beta2,2)*yb*pow(ytau,2) + 
+       257.1964229922337*pow(beta2,4)*yb*pow(ytau,2) + 
+       257.1964229922337*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) + 
+       73.48469228349533*pow(beta2,4)*pow(beta3,2)*yb*pow(ytau,2)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a7= f * sqr(lambda) * ((8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*
+      pow(yb,4))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (6.*beta2*(-1.4142135623730951 - 9.899494936611665*pow(beta2,2) + 
+        11.313708498984761*pow(beta2,4) - 14.142135623730951*pow(beta3,2) + 
+        2.8284271247461903*pow(beta2,2)*pow(beta3,2) + 
+        11.313708498984761*pow(beta2,4)*pow(beta3,2) + 
+        2.8284271247461903*pow(beta3,4) - 
+        5.656854249492381*pow(beta2,2)*pow(beta3,4) + 
+        2.8284271247461903*pow(beta2,4)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (3.*beta2*(-18.38477631085024 + 15.556349186104047*pow(beta2,2) + 
+        2.8284271247461903*pow(beta2,4) - 14.142135623730951*pow(beta3,2) + 
+        19.79898987322333*pow(beta2,2)*pow(beta3,2) - 
+        5.656854249492381*pow(beta2,4)*pow(beta3,2) - 
+        5.656854249492381*pow(beta3,4) + 
+        2.8284271247461903*pow(beta2,2)*pow(beta3,4) + 
+        2.8284271247461903*pow(beta2,4)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (9.*beta2*(-9.899494936611665 - 1.4142135623730951*pow(beta2,2) + 
+        11.313708498984761*pow(beta2,4) + 2.8284271247461903*pow(beta3,2) - 
+        14.142135623730951*pow(beta2,2)*pow(beta3,2) + 
+        11.313708498984761*pow(beta2,4)*pow(beta3,2) - 
+        5.656854249492381*pow(beta3,4) + 
+        2.8284271247461903*pow(beta2,2)*pow(beta3,4) + 
+        2.8284271247461903*pow(beta2,4)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*
+      pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*beta2*(-1. + pow(beta2,2))*
+      (13. + 2.*pow(beta2,2) + 10.*pow(beta3,2) - 4.*pow(beta2,2)*pow(beta3,2) + 
+        4.*pow(beta3,4) + 2.*pow(beta2,2)*pow(beta3,4))*pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*beta2*(-1. + pow(beta2,2))*
+      (7. + 8.*pow(beta2,2) - 2.*pow(beta3,2) + 8.*pow(beta2,2)*pow(beta3,2) + 
+        4.*pow(beta3,4) + 2.*pow(beta2,2)*pow(beta3,4))*pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*beta2*pow(1. - 1.*pow(beta2,2) - 1.*pow(beta3,2) + 
+        pow(beta2,2)*pow(beta3,2),2)*pow(yb,2)*(3.*pow(yb,2) + pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (0.4*(-1.4142135623730951*beta2*pow(yb,2) + 
+        1.4142135623730951*pow(beta2,3)*pow(yb,2))*
+      (-7.*g12 - 45.*g22 - 80.*g32 + 45.*pow(yb,2) + 45.*pow(ytau,2)))/
+    pow(2. + pow(beta2,2),2) + (8.485281374238571*beta2*
+      pow(-1. + pow(beta3,2),2)*pow(yb,2)*
+      (-3.*pow(yb,2) + 3.*pow(beta2,2)*pow(yb,2) - 1.*pow(ytau,2) + 
+        pow(beta2,2)*pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a8= f * sqr(lambda) * ((-4.*pow(-1. + pow(beta3,2),2)*pow(yb,4))/pow(2. + pow(beta3,2),2) + 
+   (4.*pow(-1. + pow(beta2,2),2)*pow(-1. + pow(beta3,2),2)*pow(yb,4))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (4.*pow(-1. + pow(beta2,2),2)*
+      (1. + 8.*pow(beta2,2) + 10.*pow(beta3,2) + 8.*pow(beta2,2)*pow(beta3,2) - 
+        2.*pow(beta3,4) + 2.*pow(beta2,2)*pow(beta3,4))*pow(yb,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (2.*(13.*pow(yb,4) - 24.*pow(beta2,2)*pow(yb,4) + 
+        9.*pow(beta2,4)*pow(yb,4) + 2.*pow(beta2,6)*pow(yb,4) + 
+        10.*pow(beta3,2)*pow(yb,4) - 24.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) + 
+        18.*pow(beta2,4)*pow(beta3,2)*pow(yb,4) - 
+        4.*pow(beta2,6)*pow(beta3,2)*pow(yb,4) + 4.*pow(beta3,4)*pow(yb,4) - 
+        6.*pow(beta2,2)*pow(beta3,4)*pow(yb,4) + 
+        2.*pow(beta2,6)*pow(beta3,4)*pow(yb,4)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (6.*(7.*pow(yb,4) - 6.*pow(beta2,2)*pow(yb,4) - 9.*pow(beta2,4)*pow(yb,4) + 
+        8.*pow(beta2,6)*pow(yb,4) - 2.*pow(beta3,2)*pow(yb,4) + 
+        12.*pow(beta2,2)*pow(beta3,2)*pow(yb,4) - 
+        18.*pow(beta2,4)*pow(beta3,2)*pow(yb,4) + 
+        8.*pow(beta2,6)*pow(beta3,2)*pow(yb,4) + 4.*pow(beta3,4)*pow(yb,4) - 
+        6.*pow(beta2,2)*pow(beta3,4)*pow(yb,4) + 
+        2.*pow(beta2,6)*pow(beta3,4)*pow(yb,4)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) - 
+   (4.*pow(-1. + pow(beta3,2),2)*pow(yb,2)*pow(yt,2))/
+    pow(2. + pow(beta3,2),2) + (4.*pow(-1. + pow(beta2,2),2)*
+      pow(-1. + pow(beta3,2),2)*pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (2.*pow(-1. + pow(beta2,2),2)*
+      (13. + 2.*pow(beta2,2) + 10.*pow(beta3,2) - 4.*pow(beta2,2)*pow(beta3,2) + 
+        4.*pow(beta3,4) + 2.*pow(beta2,2)*pow(beta3,4))*pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (2.*pow(-1. + pow(beta2,2),2)*
+      (7. + 8.*pow(beta2,2) - 2.*pow(beta3,2) + 8.*pow(beta2,2)*pow(beta3,2) + 
+        4.*pow(beta3,4) + 2.*pow(beta2,2)*pow(beta3,4))*pow(yb,2)*pow(yt,2))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.*pow(-1. + pow(beta2,2),3)*pow(-1. + pow(beta3,2),2)*pow(yb,2)*
+      (3.*pow(yb,2) + pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.*pow(-1. + pow(beta2,2),2)*pow(-1. + pow(beta3,2),2)*pow(yb,2)*
+      (3.*pow(yb,2) + pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (0.26666666666666666*pow(-1. + pow(beta2,2),2)*pow(yb,2)*
+      (-7.*g12 - 45.*g22 - 80.*g32 + 45.*pow(yb,2) + 45.*pow(ytau,2)))/
+    pow(2. + pow(beta2,2),2));  
+
+  
+  
+  setSoftMassElement(mDr,1,1, mdrsq + a0);
+  setSoftMassElement(mDr,1,2, a1);
+  setSoftMassElement(mDr,1,3, a2);
+  setSoftMassElement(mDr,2,1, a3);
+  setSoftMassElement(mDr,2,2, mdrsq + a4);
+  setSoftMassElement(mDr,2,3, a5);
+  setSoftMassElement(mDr,3,1, a6);
+  setSoftMassElement(mDr,3,2, a7);
+  setSoftMassElement(mDr,3,3, mdrsq + a8);
+  
+  //Ll
+a0= f * sqr(lambda) * ((0.6*(-72.*g12*pow(ytau,2) - 72.*pow(beta2,2)*g12*pow(ytau,2) - 
+       18.*pow(beta2,4)*g12*pow(ytau,2) - 36.*pow(beta3,2)*g12*pow(ytau,2) - 
+       36.*pow(beta2,2)*pow(beta3,2)*g12*pow(ytau,2) - 
+       9.*pow(beta2,4)*pow(beta3,2)*g12*pow(ytau,2) - 120.*g22*pow(ytau,2) - 
+       120.*pow(beta2,2)*g22*pow(ytau,2) - 30.*pow(beta2,4)*g22*pow(ytau,2) - 
+       60.*pow(beta3,2)*g22*pow(ytau,2) - 
+       60.*pow(beta2,2)*pow(beta3,2)*g22*pow(ytau,2) - 
+       15.*pow(beta2,4)*pow(beta3,2)*g22*pow(ytau,2) + 
+       135.*pow(yb,2)*pow(ytau,2) + 90.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       45.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) + 
+       45.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       90.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       235.*pow(ytau,4) + 130.*pow(beta2,2)*pow(ytau,4) + 
+       85.*pow(beta2,4)*pow(ytau,4) + 50.*pow(beta3,2)*pow(ytau,4) + 
+       20.*pow(beta2,2)*pow(beta3,2)*pow(ytau,4) + 
+       20.*pow(beta2,4)*pow(beta3,2)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a1= f * sqr(lambda) * ((-0.4*betaeps*(-62.35382907247958*beta3*g12*ytau - 
+       31.17691453623979*pow(beta2,2)*beta3*g12*ytau - 
+       31.17691453623979*pow(beta3,3)*g12*ytau - 
+       15.588457268119894*pow(beta2,2)*pow(beta3,3)*g12*ytau - 
+       103.92304845413263*beta3*g22*ytau - 
+       51.96152422706631*pow(beta2,2)*beta3*g22*ytau - 
+       51.96152422706631*pow(beta3,3)*g22*ytau - 
+       25.980762113533157*pow(beta2,2)*pow(beta3,3)*g22*ytau + 
+       77.94228634059948*beta3*pow(yb,2)*ytau + 
+       77.94228634059948*pow(beta2,2)*beta3*pow(yb,2)*ytau + 
+       77.94228634059948*pow(beta3,3)*pow(yb,2)*ytau + 
+       155.88457268119896*beta3*yb*pow(ytau,2) - 
+       155.88457268119896*pow(beta2,2)*beta3*yb*pow(ytau,2) + 
+       216.50635094610965*beta3*pow(ytau,3) + 
+       43.30127018922193*pow(beta2,2)*beta3*pow(ytau,3) + 
+       147.22431864335456*pow(beta3,3)*pow(ytau,3) + 
+       60.6217782649107*pow(beta2,2)*pow(beta3,3)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a2= f * sqr(lambda) * ((0.2*betaeps*(88.18163074019441*pow(beta3,2)*g12*ytau + 
+       44.090815370097204*pow(beta2,2)*pow(beta3,2)*g12*ytau + 
+       44.090815370097204*pow(beta3,4)*g12*ytau + 
+       22.045407685048602*pow(beta2,2)*pow(beta3,4)*g12*ytau + 
+       146.96938456699067*pow(beta3,2)*g22*ytau + 
+       73.48469228349533*pow(beta2,2)*pow(beta3,2)*g22*ytau + 
+       73.48469228349533*pow(beta3,4)*g22*ytau + 
+       36.74234614174767*pow(beta2,2)*pow(beta3,4)*g22*ytau - 
+       110.22703842524301*pow(beta3,2)*pow(yb,2)*ytau - 
+       110.22703842524301*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau - 
+       110.22703842524301*pow(beta3,4)*pow(yb,2)*ytau - 
+       220.45407685048602*pow(beta3,2)*yb*pow(ytau,2) + 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) - 
+       48.98979485566356*pow(ytau,3) + 
+       48.98979485566356*pow(beta2,2)*pow(ytau,3) - 
+       257.1964229922337*pow(beta3,2)*pow(ytau,3) + 
+       36.74234614174767*pow(beta2,2)*pow(beta3,2)*pow(ytau,3) - 
+       171.46428199482244*pow(beta3,4)*pow(ytau,3) - 
+       48.98979485566356*pow(beta2,2)*pow(beta3,4)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a3= f * sqr(lambda) * ((-0.4*betaeps*(-62.35382907247958*beta3*g12*ytau - 
+       31.17691453623979*pow(beta2,2)*beta3*g12*ytau - 
+       31.17691453623979*pow(beta3,3)*g12*ytau - 
+       15.588457268119894*pow(beta2,2)*pow(beta3,3)*g12*ytau - 
+       103.92304845413263*beta3*g22*ytau - 
+       51.96152422706631*pow(beta2,2)*beta3*g22*ytau - 
+       51.96152422706631*pow(beta3,3)*g22*ytau - 
+       25.980762113533157*pow(beta2,2)*pow(beta3,3)*g22*ytau + 
+       77.94228634059948*beta3*pow(yb,2)*ytau + 
+       77.94228634059948*pow(beta2,2)*beta3*pow(yb,2)*ytau + 
+       77.94228634059948*pow(beta3,3)*pow(yb,2)*ytau + 
+       155.88457268119896*beta3*yb*pow(ytau,2) - 
+       155.88457268119896*pow(beta2,2)*beta3*yb*pow(ytau,2) + 
+       216.50635094610965*beta3*pow(ytau,3) + 
+       43.30127018922193*pow(beta2,2)*beta3*pow(ytau,3) + 
+       147.22431864335456*pow(beta3,3)*pow(ytau,3) + 
+       60.6217782649107*pow(beta2,2)*pow(beta3,3)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a4= f * sqr(lambda) * ((1.8*(-72.*pow(beta3,2)*g12*pow(ytau,2) - 
+       72.*pow(beta2,2)*pow(beta3,2)*g12*pow(ytau,2) - 
+       18.*pow(beta2,4)*pow(beta3,2)*g12*pow(ytau,2) - 
+       36.*pow(beta3,4)*g12*pow(ytau,2) - 
+       36.*pow(beta2,2)*pow(beta3,4)*g12*pow(ytau,2) - 
+       9.*pow(beta2,4)*pow(beta3,4)*g12*pow(ytau,2) - 
+       120.*pow(beta3,2)*g22*pow(ytau,2) - 
+       120.*pow(beta2,2)*pow(beta3,2)*g22*pow(ytau,2) - 
+       30.*pow(beta2,4)*pow(beta3,2)*g22*pow(ytau,2) - 
+       60.*pow(beta3,4)*g22*pow(ytau,2) - 
+       60.*pow(beta2,2)*pow(beta3,4)*g22*pow(ytau,2) - 
+       15.*pow(beta2,4)*pow(beta3,4)*g22*pow(ytau,2) + 
+       105.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       150.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       15.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       75.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       145.*pow(beta3,2)*pow(ytau,4) + 
+       70.*pow(beta2,2)*pow(beta3,2)*pow(ytau,4) + 
+       55.*pow(beta2,4)*pow(beta3,2)*pow(ytau,4) + 
+       140.*pow(beta3,4)*pow(ytau,4) + 
+       80.*pow(beta2,2)*pow(beta3,4)*pow(ytau,4) + 
+       50.*pow(beta2,4)*pow(beta3,4)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));
+a5= f * sqr(lambda) * ((8.485281374238571*pow(-1. + pow(beta2,2),2)*beta3*(-1. + pow(beta3,2))*
+      pow(ytau,4))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) - 
+   (3.181980515339464*(-1. + pow(beta3,2))*
+      (-7.*beta3 - 2.*pow(beta2,2)*beta3 - 2.*pow(beta3,3) + 
+        2.*pow(beta2,2)*pow(beta3,3))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)) + 
+   (9.54594154601839*pow(beta2,2)*(-1. + pow(beta3,2))*
+      (5.*beta3 + 4.*pow(beta2,2)*beta3 - 2.*pow(beta3,3) + 
+        2.*pow(beta2,2)*pow(beta3,3))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),3)) + 
+   (2.1213203435596424*pow(-1. + pow(beta2,2),2)*(-1. + pow(beta3,2))*
+      (5.*beta3 + 4.*pow(beta2,2)*beta3 - 2.*pow(beta3,3) + 
+        2.*pow(beta2,2)*pow(beta3,3))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),3)) + 
+   (4.242640687119286*(-1. + pow(beta3,2))*
+      (beta3 + 10.*pow(beta2,2)*beta3 - 2.*pow(beta2,4)*beta3 + 8.*pow(beta3,3) + 
+        8.*pow(beta2,2)*pow(beta3,3) + 2.*pow(beta2,4)*pow(beta3,3))*
+      pow(ytau,4))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)) + 
+   (6.363961030678928*(-1. + pow(beta3,2))*
+      (7.*beta3 - 2.*pow(beta2,2)*beta3 + 4.*pow(beta2,4)*beta3 + 
+        8.*pow(beta3,3) + 8.*pow(beta2,2)*pow(beta3,3) + 
+        2.*pow(beta2,4)*pow(beta3,3))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)) + 
+   (4.242640687119286*beta3*pow(1. - 1.*pow(beta2,2) - 1.*pow(beta3,2) + 
+        pow(beta2,2)*pow(beta3,2),2)*pow(ytau,2)*(3.*pow(yb,2) + pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)) + 
+   (4.242640687119286*pow(-1. + pow(beta2,2),2)*beta3*pow(ytau,2)*
+      (-3.*pow(yb,2) + 3.*pow(beta3,2)*pow(yb,2) - 1.*pow(ytau,2) + 
+        pow(beta3,2)*pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (0.6*(-9.*g12 - 15.*g22 + 15.*pow(yb,2) + 5.*pow(ytau,2))*
+      (-1.4142135623730951*beta3*pow(ytau,2) + 
+        1.4142135623730951*pow(beta3,3)*pow(ytau,2)))/pow(2. + pow(beta3,2),2));
+a6= f * sqr(lambda) * ((0.2*betaeps*(88.18163074019441*pow(beta3,2)*g12*ytau + 
+       44.090815370097204*pow(beta2,2)*pow(beta3,2)*g12*ytau + 
+       44.090815370097204*pow(beta3,4)*g12*ytau + 
+       22.045407685048602*pow(beta2,2)*pow(beta3,4)*g12*ytau + 
+       146.96938456699067*pow(beta3,2)*g22*ytau + 
+       73.48469228349533*pow(beta2,2)*pow(beta3,2)*g22*ytau + 
+       73.48469228349533*pow(beta3,4)*g22*ytau + 
+       36.74234614174767*pow(beta2,2)*pow(beta3,4)*g22*ytau - 
+       110.22703842524301*pow(beta3,2)*pow(yb,2)*ytau - 
+       110.22703842524301*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau - 
+       110.22703842524301*pow(beta3,4)*pow(yb,2)*ytau - 
+       220.45407685048602*pow(beta3,2)*yb*pow(ytau,2) + 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) - 
+       48.98979485566356*pow(ytau,3) + 
+       48.98979485566356*pow(beta2,2)*pow(ytau,3) - 
+       257.1964229922337*pow(beta3,2)*pow(ytau,3) + 
+       36.74234614174767*pow(beta2,2)*pow(beta3,2)*pow(ytau,3) - 
+       171.46428199482244*pow(beta3,4)*pow(ytau,3) - 
+       48.98979485566356*pow(beta2,2)*pow(beta3,4)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),1.5)*pow(2. + pow(beta3,2),2)));
+a7= f * sqr(lambda) * ((0.6*(101.82337649086286*beta3*g12*pow(ytau,2) + 
+       101.82337649086286*pow(beta2,2)*beta3*g12*pow(ytau,2) + 
+       25.455844122715714*pow(beta2,4)*beta3*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta3,3)*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta2,2)*pow(beta3,3)*g12*pow(ytau,2) - 
+       12.727922061357857*pow(beta2,4)*pow(beta3,3)*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta3,5)*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta2,2)*pow(beta3,5)*g12*pow(ytau,2) - 
+       12.727922061357857*pow(beta2,4)*pow(beta3,5)*g12*pow(ytau,2) + 
+       169.7056274847714*beta3*g22*pow(ytau,2) + 
+       169.7056274847714*pow(beta2,2)*beta3*g22*pow(ytau,2) + 
+       42.42640687119285*pow(beta2,4)*beta3*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta3,3)*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta2,2)*pow(beta3,3)*g22*pow(ytau,2) - 
+       21.213203435596427*pow(beta2,4)*pow(beta3,3)*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta3,5)*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta2,2)*pow(beta3,5)*g22*pow(ytau,2) - 
+       21.213203435596427*pow(beta2,4)*pow(beta3,5)*g22*pow(ytau,2) - 
+       190.91883092036784*beta3*pow(yb,2)*pow(ytau,2) - 
+       127.27922061357856*pow(beta2,2)*beta3*pow(yb,2)*pow(ytau,2) - 
+       63.63961030678928*pow(beta2,4)*beta3*pow(yb,2)*pow(ytau,2) + 
+       63.63961030678928*pow(beta3,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta2,2)*pow(beta3,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta3,5)*pow(yb,2)*pow(ytau,2) + 
+       63.63961030678928*pow(beta2,4)*pow(beta3,5)*pow(yb,2)*pow(ytau,2) - 
+       219.20310216782974*beta3*pow(ytau,4) - 
+       70.71067811865476*pow(beta2,2)*beta3*pow(ytau,4) - 
+       91.92388155425118*pow(beta2,4)*beta3*pow(ytau,4) + 
+       14.142135623730951*pow(beta3,3)*pow(ytau,4) - 
+       28.284271247461902*pow(beta2,2)*pow(beta3,3)*pow(ytau,4) + 
+       14.142135623730951*pow(beta2,4)*pow(beta3,3)*pow(ytau,4) + 
+       205.0609665440988*pow(beta3,5)*pow(ytau,4) + 
+       98.99494936611666*pow(beta2,2)*pow(beta3,5)*pow(ytau,4) + 
+       77.78174593052023*pow(beta2,4)*pow(beta3,5)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));
+a8= f * sqr(lambda) * ((0.4*(-72.*g12*pow(ytau,2) - 72.*pow(beta2,2)*g12*pow(ytau,2) - 
+       18.*pow(beta2,4)*g12*pow(ytau,2) + 108.*pow(beta3,2)*g12*pow(ytau,2) + 
+       108.*pow(beta2,2)*pow(beta3,2)*g12*pow(ytau,2) + 
+       27.*pow(beta2,4)*pow(beta3,2)*g12*pow(ytau,2) - 
+       36.*pow(beta3,6)*g12*pow(ytau,2) - 
+       36.*pow(beta2,2)*pow(beta3,6)*g12*pow(ytau,2) - 
+       9.*pow(beta2,4)*pow(beta3,6)*g12*pow(ytau,2) - 120.*g22*pow(ytau,2) - 
+       120.*pow(beta2,2)*g22*pow(ytau,2) - 30.*pow(beta2,4)*g22*pow(ytau,2) + 
+       180.*pow(beta3,2)*g22*pow(ytau,2) + 
+       180.*pow(beta2,2)*pow(beta3,2)*g22*pow(ytau,2) + 
+       45.*pow(beta2,4)*pow(beta3,2)*g22*pow(ytau,2) - 
+       60.*pow(beta3,6)*g22*pow(ytau,2) - 
+       60.*pow(beta2,2)*pow(beta3,6)*g22*pow(ytau,2) - 
+       15.*pow(beta2,4)*pow(beta3,6)*g22*pow(ytau,2) + 
+       165.*pow(yb,2)*pow(ytau,2) + 30.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       75.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) - 
+       225.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       90.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       90.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       45.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       90.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) - 
+       45.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       105.*pow(beta3,6)*pow(yb,2)*pow(ytau,2) - 
+       30.*pow(beta2,2)*pow(beta3,6)*pow(yb,2)*pow(ytau,2) + 
+       60.*pow(beta2,4)*pow(beta3,6)*pow(yb,2)*pow(ytau,2) + 85.*pow(ytau,4) + 
+       190.*pow(beta2,2)*pow(ytau,4) - 5.*pow(beta2,4)*pow(ytau,4) - 
+       300.*pow(beta3,2)*pow(ytau,4) + 
+       240.*pow(beta2,2)*pow(beta3,2)*pow(ytau,4) - 
+       210.*pow(beta2,4)*pow(beta3,2)*pow(ytau,4) - 
+       195.*pow(beta3,4)*pow(ytau,4) + 
+       30.*pow(beta2,2)*pow(beta3,4)*pow(ytau,4) - 
+       105.*pow(beta2,4)*pow(beta3,4)*pow(ytau,4) + 
+       140.*pow(beta3,6)*pow(ytau,4) + 
+       80.*pow(beta2,2)*pow(beta3,6)*pow(ytau,4) + 
+       50.*pow(beta2,4)*pow(beta3,6)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),3)));  
+
+
+  setSoftMassElement(mLl,1,1, mllsq  + a0);
+  setSoftMassElement(mLl,1,2, a1);
+  setSoftMassElement(mLl,1,3, a2);
+  setSoftMassElement(mLl,2,1, a3);
+  setSoftMassElement(mLl,2,2, mllsq  + a4);
+  setSoftMassElement(mLl,2,3, a5);
+  setSoftMassElement(mLl,3,1, a6);
+  setSoftMassElement(mLl,3,2, a7);
+  setSoftMassElement(mLl,3,3, mllsq  + a8);
+  
+  
+  //Er
+a0= f * sqr(lambda) * ((3.6*(-24.*g12*pow(ytau,2) - 12.*pow(beta2,2)*g12*pow(ytau,2) - 
+       24.*pow(beta3,2)*g12*pow(ytau,2) - 
+       12.*pow(beta2,2)*pow(beta3,2)*g12*pow(ytau,2) - 
+       6.*pow(beta3,4)*g12*pow(ytau,2) - 
+       3.*pow(beta2,2)*pow(beta3,4)*g12*pow(ytau,2) - 40.*g22*pow(ytau,2) - 
+       20.*pow(beta2,2)*g22*pow(ytau,2) - 40.*pow(beta3,2)*g22*pow(ytau,2) - 
+       20.*pow(beta2,2)*pow(beta3,2)*g22*pow(ytau,2) - 
+       10.*pow(beta3,4)*g22*pow(ytau,2) - 
+       5.*pow(beta2,2)*pow(beta3,4)*g22*pow(ytau,2) + 
+       45.*pow(yb,2)*pow(ytau,2) + 15.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       15.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 75.*pow(ytau,4) + 
+       15.*pow(beta2,2)*pow(ytau,4) + 50.*pow(beta3,2)*pow(ytau,4) + 
+       10.*pow(beta2,2)*pow(beta3,2)*pow(ytau,4) + 
+       25.*pow(beta3,4)*pow(ytau,4) + 5.*pow(beta2,2)*pow(beta3,4)*pow(ytau,4))
+     )/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)));
+a1= f * sqr(lambda) * ((-2.4*betaeps*(-20.784609690826528*beta2*g12*ytau - 
+       10.392304845413264*pow(beta2,3)*g12*ytau - 
+       10.392304845413264*beta2*pow(beta3,2)*g12*ytau - 
+       5.196152422706632*pow(beta2,3)*pow(beta3,2)*g12*ytau - 
+       34.64101615137754*beta2*g22*ytau - 17.32050807568877*pow(beta2,3)*g22*ytau - 
+       17.32050807568877*beta2*pow(beta3,2)*g22*ytau - 
+       8.660254037844386*pow(beta2,3)*pow(beta3,2)*g22*ytau + 
+       25.980762113533157*beta2*pow(yb,2)*ytau + 
+       25.980762113533157*pow(beta2,3)*pow(yb,2)*ytau + 
+       25.980762113533157*beta2*pow(beta3,2)*pow(yb,2)*ytau + 
+       51.96152422706631*beta2*yb*pow(ytau,2) - 
+       51.96152422706631*beta2*pow(beta3,2)*yb*pow(ytau,2) + 
+       77.94228634059948*beta2*pow(ytau,3) + 
+       51.96152422706631*pow(beta2,3)*pow(ytau,3) + 
+       8.660254037844386*beta2*pow(beta3,2)*pow(ytau,3) + 
+       17.32050807568877*pow(beta2,3)*pow(beta3,2)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a2= f * sqr(lambda) * ((-0.4*betaeps*(-88.18163074019441*pow(beta2,2)*g12*ytau - 
+       44.090815370097204*pow(beta2,4)*g12*ytau - 
+       44.090815370097204*pow(beta2,2)*pow(beta3,2)*g12*ytau - 
+       22.045407685048602*pow(beta2,4)*pow(beta3,2)*g12*ytau - 
+       146.96938456699067*pow(beta2,2)*g22*ytau - 
+       73.48469228349533*pow(beta2,4)*g22*ytau - 
+       73.48469228349533*pow(beta2,2)*pow(beta3,2)*g22*ytau - 
+       36.74234614174767*pow(beta2,4)*pow(beta3,2)*g22*ytau + 
+       110.22703842524301*pow(beta2,2)*pow(yb,2)*ytau + 
+       110.22703842524301*pow(beta2,4)*pow(yb,2)*ytau + 
+       110.22703842524301*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau + 
+       220.45407685048602*pow(beta2,2)*yb*pow(ytau,2) - 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) + 
+       232.7015255644019*pow(beta2,2)*pow(ytau,3) + 
+       171.46428199482244*pow(beta2,4)*pow(ytau,3) - 
+       12.24744871391589*pow(beta2,2)*pow(beta3,2)*pow(ytau,3) + 
+       48.98979485566356*pow(beta2,4)*pow(beta3,2)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a3= f * sqr(lambda) * ((-2.4*betaeps*(-20.784609690826528*beta2*g12*ytau - 
+       10.392304845413264*pow(beta2,3)*g12*ytau - 
+       10.392304845413264*beta2*pow(beta3,2)*g12*ytau - 
+       5.196152422706632*pow(beta2,3)*pow(beta3,2)*g12*ytau - 
+       34.64101615137754*beta2*g22*ytau - 17.32050807568877*pow(beta2,3)*g22*ytau - 
+       17.32050807568877*beta2*pow(beta3,2)*g22*ytau - 
+       8.660254037844386*pow(beta2,3)*pow(beta3,2)*g22*ytau + 
+       25.980762113533157*beta2*pow(yb,2)*ytau + 
+       25.980762113533157*pow(beta2,3)*pow(yb,2)*ytau + 
+       25.980762113533157*beta2*pow(beta3,2)*pow(yb,2)*ytau + 
+       51.96152422706631*beta2*yb*pow(ytau,2) - 
+       51.96152422706631*beta2*pow(beta3,2)*yb*pow(ytau,2) + 
+       77.94228634059948*beta2*pow(ytau,3) + 
+       51.96152422706631*pow(beta2,3)*pow(ytau,3) + 
+       8.660254037844386*beta2*pow(beta3,2)*pow(ytau,3) + 
+       17.32050807568877*pow(beta2,3)*pow(beta3,2)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a4= f * sqr(lambda) * ((10.8*(-24.*pow(beta2,2)*g12*pow(ytau,2) - 12.*pow(beta2,4)*g12*pow(ytau,2) - 
+       24.*pow(beta2,2)*pow(beta3,2)*g12*pow(ytau,2) - 
+       12.*pow(beta2,4)*pow(beta3,2)*g12*pow(ytau,2) - 
+       6.*pow(beta2,2)*pow(beta3,4)*g12*pow(ytau,2) - 
+       3.*pow(beta2,4)*pow(beta3,4)*g12*pow(ytau,2) - 
+       40.*pow(beta2,2)*g22*pow(ytau,2) - 20.*pow(beta2,4)*g22*pow(ytau,2) - 
+       40.*pow(beta2,2)*pow(beta3,2)*g22*pow(ytau,2) - 
+       20.*pow(beta2,4)*pow(beta3,2)*g22*pow(ytau,2) - 
+       10.*pow(beta2,2)*pow(beta3,4)*g22*pow(ytau,2) - 
+       5.*pow(beta2,4)*pow(beta3,4)*g22*pow(ytau,2) + 
+       35.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) + 
+       25.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) + 
+       50.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       10.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       5.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       10.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       45.*pow(beta2,2)*pow(ytau,4) + 45.*pow(beta2,4)*pow(ytau,4) + 
+       30.*pow(beta2,2)*pow(beta3,2)*pow(ytau,4) + 
+       30.*pow(beta2,4)*pow(beta3,2)*pow(ytau,4) + 
+       15.*pow(beta2,2)*pow(beta3,4)*pow(ytau,4) + 
+       15.*pow(beta2,4)*pow(beta3,4)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));
+a5= f * sqr(lambda) * ((8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(-1. + pow(beta3,2),2)*
+      pow(ytau,4))/(pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*(-1. + pow(beta2,2))*
+      (beta2 + 8.*pow(beta2,3) + 10.*beta2*pow(beta3,2) + 
+        8.*pow(beta2,3)*pow(beta3,2) - 2.*beta2*pow(beta3,4) + 
+        2.*pow(beta2,3)*pow(beta3,4))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (4.242640687119286*(-1. + pow(beta2,2))*
+      (13.*beta2 + 2.*pow(beta2,3) + 10.*beta2*pow(beta3,2) - 
+        4.*pow(beta2,3)*pow(beta3,2) + 4.*beta2*pow(beta3,4) + 
+        2.*pow(beta2,3)*pow(beta3,4))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (12.727922061357857*(-1. + pow(beta2,2))*
+      (7.*beta2 + 8.*pow(beta2,3) - 2.*beta2*pow(beta3,2) + 
+        8.*pow(beta2,3)*pow(beta3,2) + 4.*beta2*pow(beta3,4) + 
+        2.*pow(beta2,3)*pow(beta3,4))*pow(ytau,4))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*beta2*pow(1. - 1.*pow(beta2,2) - 1.*pow(beta3,2) + 
+        pow(beta2,2)*pow(beta3,2),2)*pow(ytau,2)*(3.*pow(yb,2) + pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)) + 
+   (8.485281374238571*beta2*pow(-1. + pow(beta3,2),2)*pow(ytau,2)*
+      (-3.*pow(yb,2) + 3.*pow(beta2,2)*pow(yb,2) - 1.*pow(ytau,2) + 
+        pow(beta2,2)*pow(ytau,2)))/
+    (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),2)) + 
+   (1.2*(-9.*g12 - 15.*g22 + 15.*pow(yb,2) + 5.*pow(ytau,2))*
+      (-1.4142135623730951*beta2*pow(ytau,2) + 
+        1.4142135623730951*pow(beta2,3)*pow(ytau,2)))/pow(2. + pow(beta2,2),2));
+a6= f * sqr(lambda) * ((-0.4*betaeps*(-88.18163074019441*pow(beta2,2)*g12*ytau - 
+       44.090815370097204*pow(beta2,4)*g12*ytau - 
+       44.090815370097204*pow(beta2,2)*pow(beta3,2)*g12*ytau - 
+       22.045407685048602*pow(beta2,4)*pow(beta3,2)*g12*ytau - 
+       146.96938456699067*pow(beta2,2)*g22*ytau - 
+       73.48469228349533*pow(beta2,4)*g22*ytau - 
+       73.48469228349533*pow(beta2,2)*pow(beta3,2)*g22*ytau - 
+       36.74234614174767*pow(beta2,4)*pow(beta3,2)*g22*ytau + 
+       110.22703842524301*pow(beta2,2)*pow(yb,2)*ytau + 
+       110.22703842524301*pow(beta2,4)*pow(yb,2)*ytau + 
+       110.22703842524301*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*ytau + 
+       220.45407685048602*pow(beta2,2)*yb*pow(ytau,2) - 
+       220.45407685048602*pow(beta2,2)*pow(beta3,2)*yb*pow(ytau,2) + 
+       232.7015255644019*pow(beta2,2)*pow(ytau,3) + 
+       171.46428199482244*pow(beta2,4)*pow(ytau,3) - 
+       12.24744871391589*pow(beta2,2)*pow(beta3,2)*pow(ytau,3) + 
+       48.98979485566356*pow(beta2,4)*pow(beta3,2)*pow(ytau,3)))/
+   (pow(2. + pow(beta2,2),2)*pow(2. + pow(beta3,2),1.5)));
+a7= f * sqr(lambda) * ((1.2*(101.82337649086286*beta2*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta2,3)*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta2,5)*g12*pow(ytau,2) + 
+       101.82337649086286*beta2*pow(beta3,2)*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta2,3)*pow(beta3,2)*g12*pow(ytau,2) - 
+       50.91168824543143*pow(beta2,5)*pow(beta3,2)*g12*pow(ytau,2) + 
+       25.455844122715714*beta2*pow(beta3,4)*g12*pow(ytau,2) - 
+       12.727922061357857*pow(beta2,3)*pow(beta3,4)*g12*pow(ytau,2) - 
+       12.727922061357857*pow(beta2,5)*pow(beta3,4)*g12*pow(ytau,2) + 
+       169.7056274847714*beta2*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta2,3)*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta2,5)*g22*pow(ytau,2) + 
+       169.7056274847714*beta2*pow(beta3,2)*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta2,3)*pow(beta3,2)*g22*pow(ytau,2) - 
+       84.8528137423857*pow(beta2,5)*pow(beta3,2)*g22*pow(ytau,2) + 
+       42.42640687119285*beta2*pow(beta3,4)*g22*pow(ytau,2) - 
+       21.213203435596427*pow(beta2,3)*pow(beta3,4)*g22*pow(ytau,2) - 
+       21.213203435596427*pow(beta2,5)*pow(beta3,4)*g22*pow(ytau,2) - 
+       190.91883092036784*beta2*pow(yb,2)*pow(ytau,2) + 
+       63.63961030678928*pow(beta2,3)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta2,5)*pow(yb,2)*pow(ytau,2) - 
+       127.27922061357856*beta2*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       127.27922061357856*pow(beta2,3)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       63.63961030678928*beta2*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       63.63961030678928*pow(beta2,5)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) - 
+       205.0609665440988*beta2*pow(ytau,4) + 
+       7.0710678118654755*pow(beta2,3)*pow(ytau,4) + 
+       197.9898987322333*pow(beta2,5)*pow(ytau,4) - 
+       98.99494936611666*beta2*pow(beta3,2)*pow(ytau,4) - 
+       14.142135623730951*pow(beta2,3)*pow(beta3,2)*pow(ytau,4) + 
+       113.13708498984761*pow(beta2,5)*pow(beta3,2)*pow(ytau,4) - 
+       77.78174593052023*beta2*pow(beta3,4)*pow(ytau,4) + 
+       7.0710678118654755*pow(beta2,3)*pow(beta3,4)*pow(ytau,4) + 
+       70.71067811865476*pow(beta2,5)*pow(beta3,4)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));
+a8= f * sqr(lambda) * ((0.8*(-72.*g12*pow(ytau,2) + 108.*pow(beta2,2)*g12*pow(ytau,2) - 
+       36.*pow(beta2,6)*g12*pow(ytau,2) - 72.*pow(beta3,2)*g12*pow(ytau,2) + 
+       108.*pow(beta2,2)*pow(beta3,2)*g12*pow(ytau,2) - 
+       36.*pow(beta2,6)*pow(beta3,2)*g12*pow(ytau,2) - 
+       18.*pow(beta3,4)*g12*pow(ytau,2) + 
+       27.*pow(beta2,2)*pow(beta3,4)*g12*pow(ytau,2) - 
+       9.*pow(beta2,6)*pow(beta3,4)*g12*pow(ytau,2) - 120.*g22*pow(ytau,2) + 
+       180.*pow(beta2,2)*g22*pow(ytau,2) - 60.*pow(beta2,6)*g22*pow(ytau,2) - 
+       120.*pow(beta3,2)*g22*pow(ytau,2) + 
+       180.*pow(beta2,2)*pow(beta3,2)*g22*pow(ytau,2) - 
+       60.*pow(beta2,6)*pow(beta3,2)*g22*pow(ytau,2) - 
+       30.*pow(beta3,4)*g22*pow(ytau,2) + 
+       45.*pow(beta2,2)*pow(beta3,4)*g22*pow(ytau,2) - 
+       15.*pow(beta2,6)*pow(beta3,4)*g22*pow(ytau,2) + 
+       165.*pow(yb,2)*pow(ytau,2) - 225.*pow(beta2,2)*pow(yb,2)*pow(ytau,2) - 
+       45.*pow(beta2,4)*pow(yb,2)*pow(ytau,2) + 
+       105.*pow(beta2,6)*pow(yb,2)*pow(ytau,2) + 
+       30.*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       90.*pow(beta2,2)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       90.*pow(beta2,4)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) - 
+       30.*pow(beta2,6)*pow(beta3,2)*pow(yb,2)*pow(ytau,2) + 
+       75.*pow(beta3,4)*pow(yb,2)*pow(ytau,2) - 
+       90.*pow(beta2,2)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) - 
+       45.*pow(beta2,4)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       60.*pow(beta2,6)*pow(beta3,4)*pow(yb,2)*pow(ytau,2) + 
+       115.*pow(ytau,4) - 225.*pow(beta2,2)*pow(ytau,4) - 
+       165.*pow(beta2,4)*pow(ytau,4) + 140.*pow(beta2,6)*pow(ytau,4) + 
+       130.*pow(beta3,2)*pow(ytau,4) + 
+       90.*pow(beta2,2)*pow(beta3,2)*pow(ytau,4) - 
+       30.*pow(beta2,4)*pow(beta3,2)*pow(ytau,4) + 
+       80.*pow(beta2,6)*pow(beta3,2)*pow(ytau,4) + 
+       25.*pow(beta3,4)*pow(ytau,4) - 
+       135.*pow(beta2,2)*pow(beta3,4)*pow(ytau,4) - 
+       75.*pow(beta2,4)*pow(beta3,4)*pow(ytau,4) + 
+       50.*pow(beta2,6)*pow(beta3,4)*pow(ytau,4)))/
+   (pow(2. + pow(beta2,2),3)*pow(2. + pow(beta3,2),2)));  
+
+  
+  setSoftMassElement(mEr,1,1, mersq + a0);
+  setSoftMassElement(mEr,1,2, a1);
+  setSoftMassElement(mEr,1,3, a2);
+  setSoftMassElement(mEr,2,1, a3);
+  setSoftMassElement(mEr,2,2, mersq + a4);
+  setSoftMassElement(mEr,2,3, a5);
+  setSoftMassElement(mEr,3,1, a6);
+  setSoftMassElement(mEr,3,2, a7);
+  setSoftMassElement(mEr,3,3, mersq + a8);
+  
+  //higgs masses
+  double deltaHu =  f * sqr(lambda) * (-6.*((pow(-1. + pow(beta3,2),2)*pow(yb,2)*pow(yt,2))/pow(2. + pow(beta3,2),2) + 
+     (2.*pow(-1. + pow(beta2,2),2)*pow(yt,4))/pow(2. + pow(beta2,2),2) + 
+     (pow(-1. + pow(beta3,2),2)*pow(yt,4))/pow(2. + pow(beta3,2),2)));
+  
+  double deltaHd =  f * sqr(lambda) *(-6.*((2.*pow(-1. + pow(beta2,2),2)*pow(yb,4))/pow(2. + pow(beta2,2),2) + 
+      (pow(-1. + pow(beta3,2),2)*pow(yb,4))/pow(2. + pow(beta3,2),2) + 
+      (pow(-1. + pow(beta3,2),2)*pow(yb,2)*pow(yt,2))/pow(2. + pow(beta3,2),2)) - 
+   6.*((2.*pow(-1. + pow(beta2,2),2)*pow(ytau,4))/pow(2. + pow(beta2,2),2) + 
+      (pow(-1. + pow(beta3,2),2)*pow(ytau,4))/pow(2. + pow(beta3,2),2)));
+  
+  setMh1Squared(mllsq + deltaHd); //Hd
+  setMh2Squared(mllsq + deltaHu); //Hu
+  
+  //trilinears
+  
+
+  
+  setTrilinearElement(UA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*yt*(yb + yt))/(Sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
+  setTrilinearElement(UA, 2, 3, lambda*(-4.242640687119286*beta3*(-1. + pow(beta3,2))*yt*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2));
+  setTrilinearElement(UA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(yt,2))/((2. + pow(beta2,2))*Sqrt(2. + pow(beta3,2))));
+  setTrilinearElement(UA, 3, 2, lambda *(-8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(yt,3))/pow(2. + pow(beta2,2),2));  
+  setTrilinearElement(UA, 3, 3, lambda *((-4.*pow(-1. + pow(beta2,2),2)*pow(yt,3))/pow(2. + pow(beta2,2),2) - 
+   (2.*pow(-1. + pow(beta3,2),2)*yt*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2)));
+
+  setTrilinearElement(DA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*yb*(yb + yt))/(Sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
+  setTrilinearElement(DA, 2, 3, lambda*(-4.242640687119286*beta3*(-1. + pow(beta3,2))*yb*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2));
+  setTrilinearElement(DA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(yb,2))/((2. + pow(beta2,2))*Sqrt(2. + pow(beta3,2))));
+  setTrilinearElement(DA, 3, 2, lambda *(-8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(yb,3))/pow(2. + pow(beta2,2),2));  
+  setTrilinearElement(DA, 3, 3, lambda *((-4.*pow(-1. + pow(beta2,2),2)*pow(yb,3))/pow(2. + pow(beta2,2),2) - 
+   (2.*pow(-1. + pow(beta3,2),2)*yb*(pow(yb,2) + pow(yt,2)))/pow(2. + pow(beta3,2),2))); 
+  
+  setTrilinearElement(EA, 1, 3, lambda * (2.449489742783178*pow(beta3,2)*betaeps*pow(ytau,2))/(Sqrt(2. + pow(beta2,2))*(2. + pow(beta3,2))));
+  setTrilinearElement(EA, 2, 3, lambda*(-4.242640687119286*beta3*(-1. + pow(beta3,2))*pow(ytau,3))/pow(2. + pow(beta3,2),2));
+  setTrilinearElement(EA, 3, 1, lambda *(4.898979485566356*pow(beta2,2)*betaeps*pow(ytau,2))/((2. + pow(beta2,2))*Sqrt(2. + pow(beta3,2))));
+  setTrilinearElement(EA, 3, 2, lambda *(-8.485281374238571*beta2*(-1. + pow(beta2,2))*pow(ytau,3))/pow(2. + pow(beta2,2),2));  
+  setTrilinearElement(EA, 3, 3, lambda *((-4.*pow(-1. + pow(beta2,2),2)*pow(ytau,3))/pow(2. + pow(beta2,2),2) - 
+   (2.*pow(-1. + pow(beta3,2),2)*pow(ytau,3))/pow(2. + pow(beta3,2),2))); 
+  
+}
 }

@@ -58,7 +58,8 @@ namespace softsusy {
   void FGMCaseB1Altbcs(MssmSoftsusy & m, const DoubleVector & inputParameters);
   void FGMCaseB2bcs(MssmSoftsusy & m, const DoubleVector & inputParameters);
   void FGMCaseBNonRNbcs(MssmSoftsusy & m, const DoubleVector & inputParameters);
-  
+  void FGMCaseBNonRN1bcs(MssmSoftsusy & m, const DoubleVector & inputParameters);
+
   /// Pietro's fit to the totality of LEP2 data: gives whether the lightest
   /// Higgs is allowed or not - depends only upon the mass and beta-alpha.
   /// true means allowed, false means ruled out.
