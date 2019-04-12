@@ -5897,4 +5897,255 @@ a8= f * sqr(lambda) * ((0.8*(-72.*g12*pow(ytau,2) + 108.*pow(beta2,2)*g12*pow(yt
    (2.*pow(-1. + pow(beta3,2),2)*pow(ytau,3))/pow(2. + pow(beta3,2),2))); 
   
 }
+void MssmSoftPars::FGMCaseBNonRN2(const MssmSusy & xx, double LAMBDA, 
+             double mMess, double beta2, double betaeps, double thetavev, double cgrav) {
+  
+  // Modified thresholds by JEL 1-26-04 to accomodate numerical infinities
+  
+  const double epstol = 1.0e-4;
+  double x = LAMBDA / mMess;
+  double lambda = LAMBDA/(16.0 * sqr(PI));
+  
+  double f, g;
+  
+  if(fabs(x) < epstol) { /// hep-ph/9801271
+    g = 1.0 + x*x/6.0 + sqr(x*x)/15.0;
+    f = 1.0 + x*x/36.0 - 11.0*sqr(x*x)/450.0;
+  }
+  else if(fabs(x-1.0) < 0.0001) {
+    g  =  log(4.0);
+    f  = -sqr(PI)/6.0 + log(4.0) + 0.5*sqr(log(4.0));
+    g -=  0.0008132638905771205626;
+    f -= -0.0049563838821509165200;
+  }
+  else {
+    g = 1.0 / sqr(x) * 
+      ((1.0 + x) * log(1.0 + x) + (1.0 - x) * log(1.0 - x));
+    f = (1.0 + x) / sqr(x) * 
+      (log(1.0 + x) - 2.0 * dilog(x / (1.0 + x)) + 0.5 * 
+       dilog(2.0 * x / (1.0 + x))) + 
+      (1.0 - x) / sqr(x) * (log(1.0 - x) - 2.0 * dilog(-x / (1.0 - x)) +
+          0.5 * dilog(-2.0 * x / (1.0 - x)));
+  }
+  
+  double n5d = 2;
+  
+  double g12 = sqr(xx.displayGaugeCoupling(1));
+  double g22 = sqr(xx.displayGaugeCoupling(2));
+  double g32 = sqr(xx.displayGaugeCoupling(3));
+  
+  double yt = xx.displayYukawaElement(YU,3,3); 
+  double yb = xx.displayYukawaElement(YD,3,3); 
+  double ytau = xx.displayYukawaElement(YE,3,3);
+  
+  
+  /// There is a relative minus in the mGMSB conditions for gaugino masses,
+  /// since these equations are for L=-M/2 gaugino gaugino. See hep-ph/9801271:
+  /// BCA 27/7/12
+  double m1, m2, m3;
+  m1 = n5d * g12 * lambda * g; 
+  m2 = n5d * g22 * lambda * g; 
+  m3 = n5d * g32 * lambda * g; 
+  setGauginoMass(1, m1);   setGauginoMass(2, m2);   setGauginoMass(3, m3);
+  
+  setM32(2.37e-19 * LAMBDA * mMess * cgrav);
+  
+  double g1f = sqr(g12);
+  double g2f = sqr(g22);
+  double g3f = sqr(g32);
+  
+  double mursq, mdrsq, mersq, mqlsq, mllsq;
+  mursq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.6 * 4.0 / 9.0 * g1f);
+  mdrsq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.6 * 1.0 / 9.0 * g1f);
+  mersq = 2.0 * f * sqr(lambda) * n5d * 
+    (0.6 * g1f);
+  mqlsq = 2.0 * f * sqr(lambda) * n5d * 
+    (4.0 / 3.0 * g3f + 0.75 * g2f + 0.6 * g1f / 36.0);
+  mllsq = 2.0 * f * sqr(lambda) * n5d * 
+    (0.75 * g2f + 0.6 * 0.25 * g1f) ;
+  
+  double a0 = 0.,a1 = 0.,a2 = 0.,a3 = 0.,a4 = 0.,a5 = 0.,a6 = 0.,a7 = 0.,a8 = 0.;
+  
+  //Ql
+a0= f * sqr(lambda) *(-3.*g22*(pow(yb,2) + pow(yt,2)) - 0.06666666666666667*g12*(7.*pow(yb,2) + 13.*pow(yt,2)) + 
+   0.08333333333333333*(81.*pow(yb,4) + 30.*pow(yb,2)*pow(yt,2) + 81.*pow(yt,4) - 64.*g32*(pow(yb,2) + pow(yt,2))) + 
+   pow(yb,2)*pow(ytau,2) + 0.07856742013183861*betaeps*
+    (g12*(7.*yb + 13.*yt) + (yb + yt)*(45.*g22 + 80.*g32 - 201.*pow(yb,2) + 162.*yb*yt - 201.*pow(yt,2)) - 15.*pow(yb,2)*ytau - 
+      15.*yb*pow(ytau,2))*(cos(thetavev) + sin(thetavev)));
+a1= f * sqr(lambda) *(-0.027216552697590872*betaeps*(g12*(7.*yb + 13.*yt) + 5.*
+      ((yb + yt)*(9.*g22 + 16.*g32 - 33.*pow(yb,2) + 27.*yb*yt - 33.*pow(yt,2)) - 3.*pow(yb,2)*ytau - 3.*yb*pow(ytau,2)))*
+   (cos(thetavev) - 1.*sin(thetavev)));
+a2= f * sqr(lambda) *(0.005555555555555556*betaeps*(2.*g12*(7.*yb + 13.*yt) + 
+     5.*((yb + yt)*(18.*g22 + 32.*g32 - 27.*pow(yb,2) + 15.*yb*yt - 27.*pow(yt,2)) + 3.*pow(yb,2)*ytau - 6.*yb*pow(ytau,2)))*
+   (cos(thetavev) + sin(thetavev)));
+a3= f * sqr(lambda) *(-0.027216552697590872*betaeps*(g12*(7.*yb + 13.*yt) + 5.*
+      ((yb + yt)*(9.*g22 + 16.*g32 - 33.*pow(yb,2) + 27.*yb*yt - 33.*pow(yt,2)) - 3.*pow(yb,2)*ytau - 3.*yb*pow(ytau,2)))*
+   (cos(thetavev) - 1.*sin(thetavev)));
+a4= f * sqr(lambda) *(0.005555555555555556*(3.*(-4.*g12*(7.*pow(yb,2) + 13.*pow(yt,2)) + 
+        5.*(81.*pow(yb,4) + 81.*pow(yt,4) - 36.*g22*(pow(yb,2) + pow(yt,2)) - 64.*g32*(pow(yb,2) + pow(yt,2)) + 
+           6.*pow(yb,2)*(5.*pow(yt,2) + 2.*pow(ytau,2)))) + 
+     2.8284271247461903*betaeps*(7.*g12*(7.*yb + 13.*yt) + 
+        5.*((yb + yt)*(63.*g22 + 112.*g32 - 267.*pow(yb,2) + 216.*yb*yt - 267.*pow(yt,2)) - 21.*pow(yb,2)*ytau - 
+           21.*yb*pow(ytau,2)))*(cos(thetavev) + sin(thetavev))));
+a5= f * sqr(lambda) *(-0.009622504486493764*betaeps*(2.*g12*(7.*yb + 13.*yt) + 
+     5.*((yb + yt)*(18.*g22 + 32.*g32 - 63.*pow(yb,2) + 60.*yb*yt - 63.*pow(yt,2)) - 6.*pow(yb,2)*ytau - 6.*yb*pow(ytau,2)))*
+   (cos(thetavev) - 1.*sin(thetavev)));
+a6= f * sqr(lambda) *(0.005555555555555556*betaeps*(2.*g12*(7.*yb + 13.*yt) + 
+     5.*((yb + yt)*(18.*g22 + 32.*g32 - 27.*pow(yb,2) + 15.*yb*yt - 27.*pow(yt,2)) + 3.*pow(yb,2)*ytau - 6.*yb*pow(ytau,2)))*
+   (cos(thetavev) + sin(thetavev)));
+a7= f * sqr(lambda) *(-0.009622504486493764*betaeps*(2.*g12*(7.*yb + 13.*yt) + 
+     5.*((yb + yt)*(18.*g22 + 32.*g32 - 63.*pow(yb,2) + 60.*yb*yt - 63.*pow(yt,2)) - 6.*pow(yb,2)*ytau - 6.*yb*pow(ytau,2)))*
+   (cos(thetavev) - 1.*sin(thetavev)));
+a8= f * sqr(lambda) *(-1.*pow(yb,4) - 1.*pow(yt,4) + 1.4142135623730951*betaeps*(pow(yb,3) + pow(yt,3))*(cos(thetavev) + sin(thetavev)));  
+
+  setSoftMassElement(mQl,1,1, mqlsq  + a0);
+  setSoftMassElement(mQl,1,2, a1);
+  setSoftMassElement(mQl,1,3, a2);
+  setSoftMassElement(mQl,2,1, a3);
+  setSoftMassElement(mQl,2,2, mqlsq  + a4);
+  setSoftMassElement(mQl,2,3, a5);
+  setSoftMassElement(mQl,3,1, a6);
+  setSoftMassElement(mQl,3,2, a7);
+  setSoftMassElement(mQl,3,3, mqlsq  + a8);
+  
+  
+  //Ur
+a0= f * sqr(lambda) *(0.);
+a1= f * sqr(lambda) *(0.);
+a2= f * sqr(lambda) *(0.1414213562373095*beta2*betaeps*pow(yt,2)*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(pow(yb,2) + 5.*pow(yt,2))));
+a3= f * sqr(lambda) *(0.);
+a4= f * sqr(lambda) *(0.2*yt*(yt*(-13.*g12 + 5.*(-9.*g22 - 16.*g32 + 3.*pow(yb,2) + 21.*pow(yt,2))) + 
+     1.4142135623730951*betaeps*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(pow(yb,2) + yb*yt + 14.*pow(yt,2)))*
+      (cos(thetavev) + sin(thetavev))));
+a5= f * sqr(lambda) *(0.);
+a6= f * sqr(lambda) *(0.1414213562373095*beta2*betaeps*pow(yt,2)*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(pow(yb,2) + 5.*pow(yt,2))));
+a7= f * sqr(lambda) *(0.);
+a8= f * sqr(lambda) *(0.06666666666666667*yt*(yt*(-13.*g12 - 45.*g22 - 80.*g32 + 15.*pow(yb,2) + 75.*pow(yt,2)) + 
+     1.4142135623730951*betaeps*(13.*g12 + 45.*g22 + 80.*g32 - 15.*(pow(yb,2) + yb*yt + 10.*pow(yt,2)))*
+      (cos(thetavev) + sin(thetavev))));  
+/* 
+cout <<"UR"<<endl;
+cout <<"a0="<<a0 <<endl;
+cout <<"a1="<<a1 <<endl;
+cout <<"a2="<<a2 <<endl;
+cout <<"a3="<<a3 <<endl;
+cout <<"a4="<<a4 <<endl;
+cout <<"a5="<<a5 <<endl;
+cout <<"a6="<<a6 <<endl;
+cout <<"a7="<<a7 <<endl;
+cout <<"a8="<<a8 <<endl;
+ */
+
+  setSoftMassElement(mUr,1,1, mursq + a0);
+  setSoftMassElement(mUr,1,2, a1);
+  setSoftMassElement(mUr,1,3, a2);
+  setSoftMassElement(mUr,2,1, a3);
+  setSoftMassElement(mUr,2,2, mursq + a4);
+  setSoftMassElement(mUr,2,3, a5);
+  setSoftMassElement(mUr,3,1, a6);
+  setSoftMassElement(mUr,3,2, a7);
+  setSoftMassElement(mUr,3,3, mursq + a8);
+  
+  //Dr
+a0= f * sqr(lambda) *(0.);
+a1= f * sqr(lambda) *(0.);
+a2= f * sqr(lambda) *(0.1414213562373095*beta2*betaeps*pow(yb,2)*(7.*g12 + 45.*g22 + 80.*g32 - 15.*(5.*pow(yb,2) + pow(yt,2) + 3.*pow(ytau,2))));
+a3= f * sqr(lambda) *(0.);
+a4= f * sqr(lambda) *(0.2*yb*(yb*(-7.*g12 + 5.*(-9.*g22 - 16.*g32 + 21.*pow(yb,2) + 3.*pow(yt,2) + 9.*pow(ytau,2))) + 
+     1.4142135623730951*betaeps*(7.*g12 + 45.*g22 + 80.*g32 - 
+        15.*(14.*pow(yb,2) + pow(yt,2) + 3.*pow(ytau,2) + yb*(yt + 3.*ytau)))*(cos(thetavev) + sin(thetavev))));
+a5= f * sqr(lambda) *(0.);
+a6= f * sqr(lambda) *(0.1414213562373095*beta2*betaeps*pow(yb,2)*(7.*g12 + 45.*g22 + 80.*g32 - 15.*(5.*pow(yb,2) + pow(yt,2) + 3.*pow(ytau,2))));
+a7= f * sqr(lambda) *(0.);
+a8= f * sqr(lambda) *(0.06666666666666667*yb*(yb*(-7.*g12 + 5.*(-9.*g22 - 16.*g32 + 15.*pow(yb,2) + 3.*pow(yt,2) + 9.*pow(ytau,2))) + 
+     1.4142135623730951*betaeps*(7.*g12 + 45.*g22 + 80.*g32 - 
+        15.*(10.*pow(yb,2) + pow(yt,2) + 3.*pow(ytau,2) + yb*(yt + 3.*ytau)))*(cos(thetavev) + sin(thetavev))));  
+  
+  
+  setSoftMassElement(mDr,1,1, mdrsq + a0);
+  setSoftMassElement(mDr,1,2, a1);
+  setSoftMassElement(mDr,1,3, a2);
+  setSoftMassElement(mDr,2,1, a3);
+  setSoftMassElement(mDr,2,2, mdrsq + a4);
+  setSoftMassElement(mDr,2,3, a5);
+  setSoftMassElement(mDr,3,1, a6);
+  setSoftMassElement(mDr,3,2, a7);
+  setSoftMassElement(mDr,3,3, mdrsq + a8);
+  
+  //Ll
+a0= f * sqr(lambda) *(0.016666666666666666*ytau*(-36.*(3.*g12 + 5.*g22 - 5.*pow(yb,2))*ytau + 285.*pow(ytau,3) + 
+     14.142135623730951*betaeps*(9.*g12 + 15.*g22 - 15.*pow(yb,2) - 15.*yb*ytau - 47.*pow(ytau,2))*(cos(thetavev) + sin(thetavev))));
+a1= f * sqr(lambda) *(0.08164965809277262*betaeps*ytau*(-9.*g12 + 5.*(-3.*g22 + 3.*pow(yb,2) + 3.*yb*ytau + 7.*pow(ytau,2)))*(cos(thetavev) - 1.*sin(thetavev)));
+a2= f * sqr(lambda) *(0.016666666666666666*betaeps*ytau*(18.*g12 + 5.*(6.*g22 - 6.*pow(yb,2) + 3.*yb*ytau - 7.*pow(ytau,2)))*(cos(thetavev) + sin(thetavev)));
+a3= f * sqr(lambda) *(0.08164965809277262*betaeps*ytau*(-9.*g12 + 5.*(-3.*g22 + 3.*pow(yb,2) + 3.*yb*ytau + 7.*pow(ytau,2)))*(cos(thetavev) - 1.*sin(thetavev)));
+a4= f * sqr(lambda) *(0.016666666666666666*ytau*(3.*ytau*(-36.*g12 - 60.*g22 + 60.*pow(yb,2) + 95.*pow(ytau,2)) + 
+     2.8284271247461903*betaeps*(63.*g12 + 5.*(21.*g22 - 21.*pow(yb,2) - 21.*yb*ytau - 61.*pow(ytau,2)))*(cos(thetavev) + sin(thetavev))));
+a5= f * sqr(lambda) *(0.028867513459481294*betaeps*ytau*(-18.*g12 + 5.*(-6.*g22 + 6.*pow(yb,2) + 6.*yb*ytau + 13.*pow(ytau,2)))*
+   (cos(thetavev) - 1.*sin(thetavev)));
+a6= f * sqr(lambda) *(0.016666666666666666*betaeps*ytau*(18.*g12 + 5.*(6.*g22 - 6.*pow(yb,2) + 3.*yb*ytau - 7.*pow(ytau,2)))*(cos(thetavev) + sin(thetavev)));
+a7= f * sqr(lambda) *(0.028867513459481294*betaeps*ytau*(-18.*g12 + 5.*(-6.*g22 + 6.*pow(yb,2) + 6.*yb*ytau + 13.*pow(ytau,2)))*
+   (cos(thetavev) - 1.*sin(thetavev)));
+a8= f * sqr(lambda) *(pow(ytau,3)*(-1.*ytau + 1.4142135623730951*betaeps*(cos(thetavev) + sin(thetavev))));  
+
+  setSoftMassElement(mLl,1,1, mllsq  + a0);
+  setSoftMassElement(mLl,1,2, a1);
+  setSoftMassElement(mLl,1,3, a2);
+  setSoftMassElement(mLl,2,1, a3);
+  setSoftMassElement(mLl,2,2, mllsq  + a4);
+  setSoftMassElement(mLl,2,3, a5);
+  setSoftMassElement(mLl,3,1, a6);
+  setSoftMassElement(mLl,3,2, a7);
+  setSoftMassElement(mLl,3,3, mllsq  + a8);
+  
+  
+  //Er
+a0= f * sqr(lambda) *(0.);
+a1= f * sqr(lambda) *(0.);
+a2= f * sqr(lambda) *(1.2727922061357855*beta2*betaeps*pow(ytau,2)*(3.*g12 + 5.*g22 - 5.*pow(yb,2) - 5.*pow(ytau,2)));
+a3= f * sqr(lambda) *(0.);
+a4= f * sqr(lambda) *(0.6*ytau*(ytau*(-9.*g12 + 5.*(-3.*g22 + 3.*pow(yb,2) + 5.*pow(ytau,2))) + 
+     1.4142135623730951*betaeps*(9.*g12 + 5.*(3.*g22 - 3.*pow(yb,2) - 3.*yb*ytau - 10.*pow(ytau,2)))*(cos(thetavev) + sin(thetavev))));
+a5= f * sqr(lambda) *(0.);
+a6= f * sqr(lambda) *(1.2727922061357855*beta2*betaeps*pow(ytau,2)*(3.*g12 + 5.*g22 - 5.*pow(yb,2) - 5.*pow(ytau,2)));
+a7= f * sqr(lambda) *(0.);
+a8= f * sqr(lambda) *(0.6*ytau*(ytau*(-3.*g12 + 5.*(-1.*g22 + pow(yb,2) + pow(ytau,2))) + 
+     1.4142135623730951*betaeps*(3.*g12 + 5.*(g22 - 1.*pow(yb,2) - 1.*yb*ytau - 2.*pow(ytau,2)))*(cos(thetavev) + sin(thetavev))));  
+  
+  setSoftMassElement(mEr,1,1, mersq + a0);
+  setSoftMassElement(mEr,1,2, a1);
+  setSoftMassElement(mEr,1,3, a2);
+  setSoftMassElement(mEr,2,1, a3);
+  setSoftMassElement(mEr,2,2, mersq + a4);
+  setSoftMassElement(mEr,2,3, a5);
+  setSoftMassElement(mEr,3,1, a6);
+  setSoftMassElement(mEr,3,2, a7);
+  setSoftMassElement(mEr,3,3, mersq + a8);
+  
+  //higgs masses
+  double deltaHu =  f * sqr(lambda) * (3.*pow(yt,3)*(-1.*yt + 1.4142135623730951*betaeps*(cos(thetavev) + sin(thetavev))));
+  
+  double deltaHd =  f * sqr(lambda) *(-3.*(pow(yb,4) + pow(ytau,4)) + 4.242640687119286*betaeps*(pow(yb,3) + pow(ytau,3))*(cos(thetavev) + sin(thetavev)));
+  setMh1Squared(mllsq + deltaHd); //Hd
+  setMh2Squared(mllsq + deltaHu); //Hu
+  
+  //trilinears
+
+setTrilinearElement(UA, 1, 3, lambda * (0.16666666666666666*betaeps*yt*(yb + yt)*(cos(thetavev) + sin(thetavev))));
+setTrilinearElement(UA, 2, 3, lambda * (-0.2886751345948129*betaeps*yt*(yb + yt)*(cos(thetavev) - 1.*sin(thetavev))));
+setTrilinearElement(UA, 3, 1, lambda * (2.1213203435596424*beta2*betaeps*pow(yt,3)));
+setTrilinearElement(UA, 3, 3, lambda * (pow(yt,2)*(-1.*yt + 1.4142135623730951*betaeps*(cos(thetavev) + sin(thetavev)))));
+
+setTrilinearElement(DA, 1, 3, lambda * (0.16666666666666666*betaeps*yb*(yb + yt)*(cos(thetavev) + sin(thetavev))));
+setTrilinearElement(DA, 2, 3, lambda * (-0.2886751345948129*betaeps*yb*(yb + yt)*(cos(thetavev) - 1.*sin(thetavev))));
+setTrilinearElement(DA, 3, 1, lambda * (2.1213203435596424*beta2*betaeps*pow(yb,3)));
+setTrilinearElement(DA, 3, 3, lambda * (pow(yb,2)*(-1.*yb + 1.4142135623730951*betaeps*(cos(thetavev) + sin(thetavev)))));
+
+setTrilinearElement(EA, 1, 3, lambda * (0.16666666666666666*betaeps*pow(ytau,2)*(cos(thetavev) + sin(thetavev))));
+setTrilinearElement(EA, 2, 3, lambda * (0.2886751345948129*betaeps*pow(ytau,2)*(-1.*cos(thetavev) + sin(thetavev))));
+setTrilinearElement(EA, 3, 1, lambda * (2.1213203435596424*beta2*betaeps*pow(ytau,3)));
+setTrilinearElement(EA, 3, 3, lambda * (pow(ytau,2)*(-1.*ytau + 1.4142135623730951*betaeps*(cos(thetavev) + sin(thetavev)))));
+ 
+}
 }

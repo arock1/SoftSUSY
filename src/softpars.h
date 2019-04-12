@@ -164,6 +164,8 @@ namespace softsusy {
              double mMess, double betaeps, double cgrav);
     void FGMCaseBNonRN1(const MssmSusy & xx, double LAMBDA, 
              double mMess, double beta2, double beta3, double betaeps, double cgrav);
+    void FGMCaseBNonRN2(const MssmSusy & xx, double LAMBDA, 
+             double mMess, double beta2, double betaeps, double thetavev, double cgrav);
     
     /// Reads in soft SUSY breaking parameters from a file
     void inputSoftParsOnly();
