@@ -160,6 +160,7 @@ int main(int argc, char *argv[]) {
           strcmp(argv[1], "FGMCaseBNonRN") &&
           strcmp(argv[1], "FGMCaseBNonRN1") &&
           strcmp(argv[1], "FGMCaseBNonRN2") &&
+          strcmp(argv[1], "FGMCaseBNonRN3") &&
 		      strcmp(argv[1], "runto") && 
 		      strcmp(argv[1], "leshouches") && 
                       strcmp(argv[1], "nmssm") &&
@@ -488,10 +489,10 @@ int main(int argc, char *argv[]) {
     throw ii.str();
   }
   
-  r = &k; //telling it to flag the regular version
+  r = &k; //telling it to flag the flavorful version
   }
       if (!strcmp(argv[1], "FGMCaseBNonRN1")) {
-  cout << "# SOFTSUSY FGM CaseBNonRN" << endl;
+  cout << "# SOFTSUSY FGM CaseBNonRN1" << endl;
   
   flavourViolation = true;
   boundaryCondition = &FGMCaseBNonRN1bcs;
@@ -512,10 +513,10 @@ int main(int argc, char *argv[]) {
     throw ii.str();
   }
   
-  r = &k; //telling it to flag the regular version
+  r = &k; //telling it to flag the flavorful version
   }
       if (!strcmp(argv[1], "FGMCaseBNonRN2")) {
-  cout << "# SOFTSUSY FGM CaseBNonRN" << endl;
+  cout << "# SOFTSUSY FGM CaseBNonRN2" << endl;
   
   flavourViolation = true;
   boundaryCondition = &FGMCaseBNonRN2bcs;
@@ -523,6 +524,23 @@ int main(int argc, char *argv[]) {
     printRuledOutSpectra = false;
   pars.setEnd(6);
   pars(1) = LAMBDA; pars(2) = mMess; pars(3) = beta2; pars(4) = betaeps; pars(5) = thetavev; pars(6) = cgrav;
+  if (mMess < 1000.) {
+    ostringstream ii; 
+    ii << " mMess=" << mMess
+       << " in FGM input (too low). The point will not yield a sensible answer\n";
+    throw ii.str();
+  }
+  r = &k; //telling it to flag the flavorful version
+  }
+  if (!strcmp(argv[1], "FGMCaseBNonRN3")) {
+  cout << "# SOFTSUSY FGM CaseBNonRN3" << endl;
+  
+  flavourViolation = true;
+  boundaryCondition = &FGMCaseBNonRN3bcs;
+  modelIdent = "FGMCaseBNonRN3";
+    printRuledOutSpectra = false;
+  pars.setEnd(7);
+  pars(1) = LAMBDA; pars(2) = mMess; pars(3) = beta2; pars(4) = beta3; pars(5) = betaeps; pars(6) = thetavev; pars(7) = cgrav;
   if (mMess < 1000.) {
     ostringstream ii; 
     ii << " mMess=" << mMess
